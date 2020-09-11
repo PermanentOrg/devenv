@@ -98,4 +98,4 @@ Found a vulnerability? Report this and any other security concerns to engineerin
 
 ## License
 
-This code is free software licensed as [AGPLv3](LICENSE.md). 
+This code is free software licensed as [AGPLv3](LICENSE). 
