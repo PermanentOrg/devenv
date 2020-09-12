@@ -1,6 +1,13 @@
 # devenv
 
-This repository contains the configuration information required to bring up a development environment. Note: Many of the shared folders required to bring up the complete environment are not yet publicly available.
+This repository contains the configuration information required to
+bring up a development environment for the Permanent Legacy Foundation
+website.
+
+Note: Many of the shared folders required to bring up the complete
+environment are not yet publicly available.  This will change.  We are
+in the process of moving more code into public view, publishing it as
+open source, and streamlining our repository structure.
 
 ## Usage
 
@@ -98,4 +105,6 @@ Found a vulnerability? Report this and any other security concerns to engineerin
 
 ## License
 
-This code is free software licensed as [AGPLv3](LICENSE.md). 
+This code is free software licensed as [AGPLv3](LICENSE), or at your
+option, any final, later version published by the Free Software
+Foundation.
