@@ -42,7 +42,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../database", "/data/www/database", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../files", "/data/www/files", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../library", "/data/www/library", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../operations", "/data/www/operations", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder ".", "/data/www/devenv", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]

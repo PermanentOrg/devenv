@@ -30,10 +30,10 @@ if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
 fi
 mv /home/vagrant/sqs.txt /data/www
 echo "local" > /data/www/host.txt
-runuser -l vagrant -c "cp -R /data/www/operations/vagrant/home/vagrant/.config /home/vagrant/"
+runuser -l vagrant -c "cp -R /data/www/devenv/vagrant/home/vagrant/.config /home/vagrant/"
 runuser -l vagrant -c "mkdir /home/vagrant/.aws"
-envsubst < /data/www/operations/vagrant/home/vagrant/.aws/credentials > /home/vagrant/.aws/credentials
-envsubst < /data/www/operations/vagrant/home/vagrant/.aws/config > /home/vagrant/.aws/config
+envsubst < /data/www/devenv/vagrant/home/vagrant/.aws/credentials > /home/vagrant/.aws/credentials
+envsubst < /data/www/devenv/vagrant/home/vagrant/.aws/config > /home/vagrant/.aws/config
 runuser -l vagrant -c "aws s3 rm s3://permanent-local/$SQS_IDENT --recursive"
 
 echo "Add custom sources"
@@ -42,7 +42,7 @@ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 5072E1F5
 # Add node key
 curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add -
 # Add custom sources
-cp /data/www/operations/vagrant/etc/apt/sources.list.d/* /etc/apt/sources.list.d/
+cp /data/www/devenv/vagrant/etc/apt/sources.list.d/* /etc/apt/sources.list.d/
 
 apt-get -qq update
 echo "Install mysql"
@@ -59,9 +59,9 @@ echo "Configure apache"
 cp -R /home/vagrant/.aws /var/www
 service apache2 stop
 a2dissite 000-default
-cp /data/www/operations/vagrant/etc/apache2/apache2.conf /etc/apache2/apache2.conf
-envsubst < /data/www/operations/vagrant/etc/apache2/sites-enabled/local.permanent.conf > /etc/apache2/sites-enabled/local.permanent.conf
-envsubst < /data/www/operations/vagrant/etc/apache2/sites-enabled/preload.permanent.conf > /etc/apache2/sites-enabled/preload.permanent.conf
+cp /data/www/devenv/vagrant/etc/apache2/apache2.conf /etc/apache2/apache2.conf
+envsubst < /data/www/devenv/vagrant/etc/apache2/sites-enabled/local.permanent.conf > /etc/apache2/sites-enabled/local.permanent.conf
+envsubst < /data/www/devenv/vagrant/etc/apache2/sites-enabled/preload.permanent.conf > /etc/apache2/sites-enabled/preload.permanent.conf
 cp /data/www/files/certs/local/* /etc/ssl/
 a2enmod ssl
 a2enmod expires
