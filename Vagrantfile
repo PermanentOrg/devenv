@@ -48,7 +48,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
   config.vm.synced_folder "../uploader", "/data/www/uploader", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../mdot", "/data/www/mdot", owner: "vagrant", group: "www-data"
-  config.vm.provision "file", source: "../share/sqs.txt", destination: "/home/vagrant/sqs.txt"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -67,7 +66,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "bootstrap.sh",
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
-          "AWS_REGION": ENV["AWS_REGION"]}
+          "AWS_REGION": ENV["AWS_REGION"],
+          "SQS_IDENT": ENV["SQS_IDENT"],
+          "DELETE_DATA": ENV["DELETE_DATA"]}
   config.vm.provision "shell", inline: "sudo systemctl daemon-reload", run: "always"
   config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
   config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"

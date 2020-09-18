@@ -12,15 +12,10 @@ apt-get -qq update
 apt-get -qq install -y curl git htop awscli wget build-essential openssl zip software-properties-common gnupg libssl-dev
 
 echo "Configure AWS SQS access"
-SQS_IDENT=`cat /home/vagrant/sqs.txt`
 
 if [[ "$SQS_IDENT" != _* ]]
 	then
-	echo "ERROR! Missing or empty sqs.txt file!"
-	echo "ERROR! Missing or empty sqs.txt file!"
-	echo "ERROR! Missing or empty sqs.txt file!"
-	echo "ERROR! Missing or empty sqs.txt file!"
-	echo "ERROR! Missing or empty sqs.txt file!"
+	echo "ERROR! Missing or malformed critical environment variables: SQS_IDENT"
 	exit 1
 fi
 if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
@@ -28,13 +23,18 @@ if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
 	echo "ERROR! Missing critical environment variable: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET!"
     exit 1
 fi
-mv /home/vagrant/sqs.txt /data/www
+
 echo "local" > /data/www/host.txt
+echo $SQS_IDENT > /data/www/sqs.txt
 runuser -l vagrant -c "cp -R /data/www/devenv/vagrant/home/vagrant/.config /home/vagrant/"
 runuser -l vagrant -c "mkdir /home/vagrant/.aws"
 envsubst < /data/www/devenv/vagrant/home/vagrant/.aws/credentials > /home/vagrant/.aws/credentials
 envsubst < /data/www/devenv/vagrant/home/vagrant/.aws/config > /home/vagrant/.aws/config
-runuser -l vagrant -c "aws s3 rm s3://permanent-local/$SQS_IDENT --recursive"
+if $DELETE_DATA
+then
+    echo "Clearing S3 files"
+    runuser -l vagrant -c "aws s3 rm s3://permanent-local/$SQS_IDENT --recursive"
+fi
 
 echo "Add custom sources"
 # Add mysql key
@@ -76,11 +76,14 @@ a2enconf charset
 a2enconf other-vhosts-access-log
 service apache2 start
 
-echo "Populate MySQL"
-service mysql restart
-sudo mysql < /data/www/docker/database/perm.sql
-sudo mysql < /data/www/website/database/wp.sql
-sudo mysql wp < /data/www/website/database/dump.sql
+if $DELETE_DATA
+then
+    echo "Populate MySQL"
+    service mysql restart
+    sudo mysql < /data/www/docker/database/perm.sql
+    sudo mysql < /data/www/website/database/wp.sql
+    sudo mysql wp < /data/www/website/database/dump.sql
+fi
 
 echo "Install node global packages"
 npm install npm --global

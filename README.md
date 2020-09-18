@@ -9,6 +9,8 @@ environment are not yet publicly available.  This will change.  We are
 in the process of moving more code into public view, publishing it as
 open source, and streamlining our repository structure.
 
+Our current development environment is a VirtualBox VM managed by [Vagrant](https://www.vagrantup.com/).
+
 ## Usage
 
 1. Install dependencies: [Vagrant](https://www.vagrantup.com/downloads) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
@@ -28,20 +30,17 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
 - Local_Video_YourName
 - Local_High_Priority_YourName
 
-4. Create an AWS Access Key. Export the following variables: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`. Here is an example of what that might look like:
-```
-export AWS_REGION="us-east-1"
-export AWS_ACCESS_KEY_ID="tHiSiSyOuRAcCeSsKeY"
-export AWS_ACCESS_SECRET="tHiSiSyOuRAcCeSsSeCrEt"
-```
+4. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
+    - Create an AWS Access Key
+    - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
+    - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
+    - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
 
-4. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
+ 5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
 for r in mdot deploy docker website task-runner library api database files email daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
 mkdir log
-mkdir share
-echo _YourName > share/sqs.txt
 ```
 Note: For all of the repositories except `website`, you need the default branch checked out. For the `website` repository, you need the `PER-7859-upgrade-wordpress` branch, until the PHP upgrade is complete.
 
@@ -49,22 +48,21 @@ No repository access? Simply create the directories.
 ```
 cd ..
 for r in mdot deploy docker website task-runner library api database files email daemon uploader log share; do mkdir $r; done
-echo _YourName > share/sqs.txt
 ```
 
-4. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
+6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
 ```
 printf "\n192.168.33.10 local.permanent.org" | sudo tee -a /etc/hosts
 ```
 
-5. Run the following command to bring a development environment for the first time, or to start up a halted VM.
+7. Run the following command to bring a development environment for the first time, or to start up a halted VM.
 ```
-vagrant up
+source .env && vagrant up
 ```
 
-For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
+Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs). 
 
-6. Load the website at https://local.permanent.org/. If you wish to sign up for an account, do that from the form on https://local.permanent.org/app. It's not possible to create an account locally on https://local.permanent.org/login because this form is an iframe pointing to our production instance.
+8. Load the website at https://local.permanent.org/. If you wish to sign up for an account, do that from the form on https://local.permanent.org/app. It's not possible to create an account locally on https://local.permanent.org/login because this form is an iframe pointing to our production instance.
 
 
 ## Troubleshooting
