@@ -107,7 +107,6 @@ echo "Configure PHP application"
 cd /data/www/library
 rm -rf vendor/
 runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --no-plugins"
-runuser -l vagrant -c "cd /data/www/library && php deploy.php"
 
 echo "Configure mdot"
 cd /data/www/mdot
