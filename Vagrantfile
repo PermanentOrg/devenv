@@ -40,7 +40,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../database", "/data/www/database", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../files", "/data/www/files", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../library", "/data/www/library", owner: "vagrant", group: "www-data"
   config.vm.synced_folder ".", "/data/www/devenv", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
