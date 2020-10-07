@@ -62,10 +62,11 @@ echo "Configure apache"
 cp -R /home/vagrant/.aws /var/www
 service apache2 stop
 a2dissite 000-default
+runuser -l vagrant -c "aws s3 cp --recursive s3://permanent-local/certs /tmp/certs"
+mv /tmp/certs/* /etc/ssl
 cp /data/www/devenv/vagrant/etc/apache2/apache2.conf /etc/apache2/apache2.conf
 envsubst < /data/www/devenv/vagrant/etc/apache2/sites-enabled/local.permanent.conf > /etc/apache2/sites-enabled/local.permanent.conf
 envsubst < /data/www/devenv/vagrant/etc/apache2/sites-enabled/preload.permanent.conf > /etc/apache2/sites-enabled/preload.permanent.conf
-cp /data/www/files/certs/local/* /etc/ssl/
 a2enmod ssl
 a2enmod expires
 a2enmod headers
@@ -111,7 +112,6 @@ runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --n
 echo "Configure mdot"
 cd /data/www/mdot
 rm -rf node_modules
-rm -rf bower_components
 runuser -l vagrant -c "cd /data/www/mdot && cp package.json ~ && cp package-lock.json ~"
 runuser -l vagrant -c "cd ~ && npm install --no-bin-links"
 runuser -l vagrant -c "rm package.json package-lock.json && mv node_modules /data/www/mdot/"
@@ -122,7 +122,7 @@ chgrp -R www-data /data/www
 
 mkdir /data/tmp
 chmod 777 /data/tmp
-ln -s /data/www/files/unittest /data/tmp/unittest
+ln -s /data/www/api/tests/files /data/tmp/unittest
 
 echo "Install wp-cli"
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
