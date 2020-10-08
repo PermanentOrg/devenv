@@ -39,7 +39,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../api", "/data/www/api", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../database", "/data/www/database", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../library", "/data/www/library", owner: "vagrant", group: "www-data"
   config.vm.synced_folder ".", "/data/www/devenv", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
@@ -62,7 +61,13 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", path: "bootstrap.sh",
+  config.vm.provision "shell", path: "bin/configure.sh",
+    env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
+          "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
+          "AWS_REGION": ENV["AWS_REGION"],
+          "PERM_ENV": "local",
+          "PERM_SUBDOMAIN": "local"}
+  config.vm.provision "shell", path: "bin/deploy.sh",
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
           "AWS_REGION": ENV["AWS_REGION"],
