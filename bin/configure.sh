@@ -6,6 +6,12 @@ TEMPLATES_PATH=/data/www/devenv/templates
 echo "US/Central" | sudo tee /etc/timezone
 dpkg-reconfigure --frontend noninteractive tzdata
 
+if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
+    then
+	echo "ERROR! Missing critical environment variable: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET!"
+    exit 1
+fi
+
 echo "Install essential software pacakges"
 apt-get -qq update
 apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg

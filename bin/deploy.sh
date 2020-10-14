@@ -15,11 +15,6 @@ if [[ "$SQS_IDENT" != _* ]]
 	echo "ERROR! Missing or malformed critical environment variables: SQS_IDENT"
 	exit 1
 fi
-if [[ -z "$AWS_REGION" || -z "$AWS_ACCESS_KEY_ID" || -z "$AWS_ACCESS_SECRET" ]]
-    then
-	echo "ERROR! Missing critical environment variable: AWS_REGION, AWS_ACCESS_KEY_ID, AWS_ACCESS_SECRET!"
-    exit 1
-fi
 
 echo $SQS_IDENT > /data/www/sqs.txt
 cp -R /var/www/.aws /home/vagrant/
