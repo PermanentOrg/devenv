@@ -28,7 +28,7 @@ apt-get -qq install -y nodejs
 echo "Install conversion tools"
 apt-get -qq install -y libreoffice ffmpeg mediainfo libde265-dev libheif-dev libimage-exiftool-perl
 apt-get -qq install -y imagemagick wkhtmltopdf
-apt-get -qq install -y apache2 php7.3 libapache2-mod-php php-mysql php-memcached php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
+apt-get -qq install -y apache2 php7.3 libapache2-mod-php php-mysql php-memcache php-curl php-cli php-imagick php-gd php-xml php-mbstring php-zip php-igbinary php-msgpack
 
 echo "Configure ImageMagick"
 cp $TEMPLATES_PATH/etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml
