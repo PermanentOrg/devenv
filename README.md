@@ -39,7 +39,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in mdot deploy docker website task-runner library api database files email daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
+for r in mdot docker website task-runner library api email daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
 mkdir log
 ```
 Note: For all of the repositories except `website`, you need the default branch checked out. For the `website` repository, you need the `PER-7859-upgrade-wordpress` branch, until the PHP upgrade is complete.
@@ -47,7 +47,7 @@ Note: For all of the repositories except `website`, you need the default branch 
 No repository access? Simply create the directories.
 ```
 cd ..
-for r in mdot deploy docker website task-runner library api database files email daemon uploader log share; do mkdir $r; done
+for r in mdot docker website task-runner library api email daemon uploader log share; do mkdir $r; done
 ```
 
 6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
