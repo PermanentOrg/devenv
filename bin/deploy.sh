@@ -85,31 +85,26 @@ mv wp-cli.phar /usr/local/bin/wp
 runuser -l vagrant -c "curl -O https://raw.githubusercontent.com/wp-cli/wp-cli/v2.4.0/utils/wp-completion.bash && mv wp-completion.bash ~/.bash_completion"
 
 echo "Configure services and cronjobs"
-rm /etc/systemd/system/uploader.service
-ln -s /data/www/uploader/scripts/uploader.service /etc/systemd/system/
+ln -s --force /data/www/uploader/scripts/uploader.service /etc/systemd/system/
 systemctl enable uploader.service
 
-rm /etc/systemd/system/queue-daemon.service
-ln -s /data/www/daemon/scripts/queue-daemon.service /etc/systemd/system/
+ln -s --force /data/www/daemon/scripts/queue-daemon.service /etc/systemd/system/
 systemctl enable queue-daemon.service
 
-rm /etc/systemd/system/process-daemon.service
-ln -s /data/www/daemon/scripts/process-daemon.service /etc/systemd/system/
+ln -s --force /data/www/daemon/scripts/process-daemon.service /etc/systemd/system/
 systemctl enable process-daemon.service
 
-rm /etc/systemd/system/sqs-daemon.service
-ln -s /data/www/daemon/scripts/sqs-daemon.service /etc/systemd/system/
+ln -s --force /data/www/daemon/scripts/sqs-daemon.service /etc/systemd/system/
 systemctl enable sqs-daemon.service
 
-rm /etc/systemd/system/video-daemon.service
-ln -s /data/www/daemon/scripts/video-daemon.service /etc/systemd/system/
+ln -s --force /data/www/daemon/scripts/video-daemon.service /etc/systemd/system/
 systemctl enable video-daemon.service
 
-ln -s /data/www/task-runner/scripts/hourly/* /etc/cron.hourly/
-ln -s /data/www/task-runner/scripts/monthly/* /etc/cron.monthly/
-ln -s /data/www/task-runner/scripts/daily/* /etc/cron.daily/
+ln -s --force /data/www/task-runner/scripts/hourly/* /etc/cron.hourly/
+ln -s --force /data/www/task-runner/scripts/monthly/* /etc/cron.monthly/
+ln -s --force /data/www/task-runner/scripts/daily/* /etc/cron.daily/
 mkdir /etc/cron.minute
-ln -s /data/www/task-runner/scripts/minute/* /etc/cron.minute/
+ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
 
 echo -e "* * * * *\troot\tcd / && run-parts --report /etc/cron.minute" >> /etc/crontab
 
