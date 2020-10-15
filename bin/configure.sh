@@ -14,7 +14,7 @@ fi
 
 echo "Install essential software pacakges"
 apt-get -qq update
-apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg
+apt-get -qq install -y curl htop wget build-essential zip software-properties-common gnupg git awscli
 
 echo $PERM_ENV  > /data/www/host.txt
 

@@ -6,7 +6,7 @@ echo "127.0.0.1 localdev" >> /etc/hosts
 
 echo "Install essential software pacakges"
 apt-get -qq update
-apt-get -qq install -y git awscli openssl libssl-dev
+apt-get -qq install -y openssl libssl-dev
 
 echo "Configure AWS SQS access"
 
