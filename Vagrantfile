@@ -61,7 +61,7 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "file", source: "../infra/templates", destination: "/tmp/templates"
-  config.vm.provision "shell", path: "../infra/bin/configure.sh",
+  config.vm.provision "shell", path: "../infra/provisioners/configure.sh",
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
           "AWS_REGION": ENV["AWS_REGION"],
