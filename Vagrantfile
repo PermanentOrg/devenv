@@ -40,7 +40,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../library", "/data/www/library", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder ".", "/data/www/devenv", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
@@ -61,17 +60,17 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  config.vm.provision "shell", path: "bin/configure.sh",
+  config.vm.provision "file", source: "../infra/templates", destination: "/tmp/templates"
+  config.vm.provision "shell", path: "../infra/bin/configure.sh",
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
           "AWS_REGION": ENV["AWS_REGION"],
           "PERM_ENV": "local",
-          "PERM_SUBDOMAIN": "local"}
+          "PERM_SUBDOMAIN": "local",
+          "APP_USER": "vagrant",
+          "TEMPLATES_PATH": "/tmp/templates"}
   config.vm.provision "shell", path: "bin/deploy.sh",
-    env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
-          "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
-          "AWS_REGION": ENV["AWS_REGION"],
-          "SQS_IDENT": ENV["SQS_IDENT"],
+    env: {"SQS_IDENT": ENV["SQS_IDENT"],
           "DELETE_DATA": ENV["DELETE_DATA"]}
   config.vm.provision "shell", inline: "sudo systemctl daemon-reload", run: "always"
   config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
