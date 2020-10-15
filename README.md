@@ -42,7 +42,6 @@ cd ..
 for r in mdot docker website task-runner library api email daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
 mkdir log
 ```
-Note: For all of the repositories except `website`, you need the default branch checked out. For the `website` repository, you need the `PER-7859-upgrade-wordpress` branch, until the PHP upgrade is complete.
 
 No repository access? Simply create the directories.
 ```
