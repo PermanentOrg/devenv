@@ -6,7 +6,7 @@ echo "127.0.0.1 localdev" >> /etc/hosts
 
 echo "Install essential software pacakges"
 apt-get -qq update
-apt-get -qq install -y openssl libssl-dev
+apt-get -qq install -y git openssl libssl-dev
 
 echo "Configure AWS SQS access"
 
@@ -17,9 +17,6 @@ if [[ "$SQS_IDENT" != _* ]]
 fi
 
 echo $SQS_IDENT > /data/www/sqs.txt
-cp -R /var/www/.aws /home/vagrant/
-chown -R vagrant /home/vagrant/.aws
-chgrp -R vagrant /home/vagrant/.aws
 
 if $DELETE_DATA
 then

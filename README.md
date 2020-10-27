@@ -39,14 +39,16 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in mdot docker website task-runner library api email daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
+for r in mdot docker website task-runner library api daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
 mkdir log
+git clone git@github.com:PermanentOrg/infrastructure.git
 ```
 
 No repository access? Simply create the directories.
 ```
 cd ..
-for r in mdot docker website task-runner library api email daemon uploader log share; do mkdir $r; done
+for r in mdot docker website task-runner library api daemon uploader log share; do mkdir $r; done
+git clone git@github.com:PermanentOrg/infrastructure.git
 ```
 
 6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
