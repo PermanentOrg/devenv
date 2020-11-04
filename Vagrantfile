@@ -31,6 +31,7 @@ Vagrant.configure(2) do |config|
   # using a specific IP.
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.network "forwarded_port", guest: 9000, host: 9000
+  config.vm.network "forwarded_port", guest: 3000, host: 3000
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -45,6 +46,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
   config.vm.synced_folder "../uploader", "/data/www/uploader", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../mdot", "/data/www/mdot", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../upload-service", "/data/www/upload-service", owner: "vagrant", group: "www-data"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -80,5 +82,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: "sudo service process-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service sqs-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service video-daemon restart", run: "always"
+  config.vm.provision "shell", inline: "sudo service node-upload restart", run: "always"
   config.vm.post_up_message = "Finished! App running at https://local.permanent.org/"
 end
