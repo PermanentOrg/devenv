@@ -35,6 +35,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
     - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
     - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
     - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
+    - `UPLOAD_SERVICE_SENTRY_DSN` is optional and allows sentry configuration for the upload service.
 
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```

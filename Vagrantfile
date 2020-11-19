@@ -67,6 +67,7 @@ Vagrant.configure(2) do |config|
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
           "AWS_REGION": ENV["AWS_REGION"],
+          "UPLOAD_SERVICE_SENTRY_DSN": ENV["UPLOAD_SERVICE_SENTRY_DSN"],
           "PERM_ENV": "local",
           "PERM_SUBDOMAIN": "local",
           "APP_USER": "vagrant",
