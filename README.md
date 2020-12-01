@@ -11,6 +11,8 @@ open source, and streamlining our repository structure.
 
 Our current development environment is a VirtualBox VM managed by [Vagrant](https://www.vagrantup.com/).
 
+We use the latest Debian build published [here](https://app.vagrantup.com/generic/boxes/debian10) for our development.
+
 ## Usage
 
 1. Install dependencies: [Vagrant](https://www.vagrantup.com/downloads) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
@@ -31,7 +33,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
 - Local_High_Priority_YourName
 
 4. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
-    - Create an AWS Access Key
+    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
     - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
     - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
     - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
@@ -41,15 +43,15 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
 ```
 cd ..
 for r in mdot docker website task-runner library api daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
+for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
-git clone git@github.com:PermanentOrg/infrastructure.git
 ```
 
 No repository access? Simply create the directories.
 ```
 cd ..
-for r in mdot docker website task-runner library api daemon uploader log share; do mkdir $r; done
-git clone git@github.com:PermanentOrg/infrastructure.git
+for r in mdot docker website task-runner library api daemon uploader log; do mkdir $r; done
+for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
 ```
 
 6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
