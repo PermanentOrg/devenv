@@ -108,6 +108,7 @@ systemctl enable video-daemon.service
 
 ln -s --force /data/www/task-runner/scripts/hourly/* /etc/cron.hourly/
 ln -s --force /data/www/task-runner/scripts/monthly/* /etc/cron.monthly/
+ln -s --force /data/www/task-runner/scripts/weekly/* /etc/cron.weekly/
 ln -s --force /data/www/task-runner/scripts/daily/* /etc/cron.daily/
 mkdir /etc/cron.minute
 ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
