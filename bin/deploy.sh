@@ -46,18 +46,6 @@ then
     sudo mysql wp < /data/www/website/database/dump.sql
 fi
 
-# Note: the uploader is deprecated, but we're keeping it until we finalize the transition.
-echo "Configure uploader"
-cd /data/www/uploader
-rm -rf node_modules
-rm -rf bower_components
-# Building the dependencies outside of the shared folder because virtualbox on macOS fails otherwise
-runuser -l vagrant -c "cd /data/www/uploader && cp package.json ~ && cp package-lock.json ~"
-runuser -l vagrant -c "cd ~ && npm install --no-bin-links"
-runuser -l vagrant -c "rm package.json package-lock.json && mv node_modules /data/www/uploader/"
-runuser -l vagrant -c "cd /data/www/uploader && bower install"
-runuser -l vagrant -c "cd /data/www/uploader && gulp"
-
 echo "Configure upload service"
 cd /data/www/upload-service
 rm -rf node_modules
@@ -91,8 +79,6 @@ mv wp-cli.phar /usr/local/bin/wp
 runuser -l vagrant -c "curl -O https://raw.githubusercontent.com/wp-cli/wp-cli/v2.4.0/utils/wp-completion.bash && mv wp-completion.bash ~/.bash_completion"
 
 echo "Configure services and cronjobs"
-ln -s --force /data/www/uploader/scripts/uploader.service /etc/systemd/system/
-systemctl enable uploader.service
 
 ln -s --force /data/www/daemon/scripts/queue-daemon.service /etc/systemd/system/
 systemctl enable queue-daemon.service

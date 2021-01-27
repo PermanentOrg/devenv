@@ -42,7 +42,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in mdot docker website task-runner library api daemon uploader; do git clone git@bitbucket.org:permanent-org/$r.git; done
+for r in mdot docker website task-runner library api daemon; do git clone git@bitbucket.org:permanent-org/$r.git; done
 for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
 ```
@@ -50,7 +50,7 @@ mkdir log
 No repository access? Simply create the directories.
 ```
 cd ..
-for r in mdot docker website task-runner library api daemon uploader log; do mkdir $r; done
+for r in mdot docker website task-runner library api daemon log; do mkdir $r; done
 for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
 ```
 

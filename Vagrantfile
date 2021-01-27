@@ -44,8 +44,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
-  config.vm.synced_folder "../uploader", "/data/www/uploader", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../mdot", "/data/www/mdot", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../web-app", "/data/www/mdot", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../upload-service", "/data/www/upload-service", owner: "vagrant", group: "www-data"
 
   # Provider-specific configuration so you can fine-tune various
@@ -78,7 +77,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: "sudo systemctl daemon-reload", run: "always"
   config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
   config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"
-  config.vm.provision "shell", inline: "sudo service uploader restart", run: "always"
   config.vm.provision "shell", inline: "sudo service queue-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service process-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service sqs-daemon restart", run: "always"
