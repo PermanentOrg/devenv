@@ -24,8 +24,8 @@ then
     runuser -l vagrant -c "aws s3 rm s3://permanent-local/$SQS_IDENT --recursive"
 fi
 
-echo "Install mysql server and memcache"
-apt-get -qq install -y mysql-server memcached
+echo "Install database servers"
+apt-get -qq install -y mysql-server memcached postgresql
 
 echo "Configure apache"
 runuser -l vagrant -c "aws s3 cp --recursive s3://permanent-local/certs /tmp/certs"
@@ -44,6 +44,9 @@ then
     sudo mysql < /data/www/docker/database/perm.sql
     sudo mysql < /data/www/website/database/wp.sql
     sudo mysql wp < /data/www/website/database/dump.sql
+    echo "SetUp Postgres"
+    sudo -u postgres psql -c "CREATE USER notifications WITH PASSWORD 'notifications';"
+    sudo -u postgres createdb --owner=notifications notifications
 fi
 
 echo "Configure upload service"
