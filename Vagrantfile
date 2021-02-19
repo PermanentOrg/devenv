@@ -37,11 +37,11 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder "../api", "/data/www/api", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../back-end/api", "/data/www/api", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../library", "/data/www/library", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../back-end/daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../back-end/library", "/data/www/library", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../back-end/task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
   config.vm.synced_folder "../web-app", "/data/www/mdot", owner: "vagrant", group: "www-data"
