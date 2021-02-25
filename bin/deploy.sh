@@ -67,7 +67,7 @@ runuser -l vagrant -c "cd /data/www/mdot && cp package.json ~ && cp package-lock
 runuser -l vagrant -c "cd ~ && npm install --no-bin-links"
 runuser -l vagrant -c "rm package.json package-lock.json && mv node_modules /data/www/mdot/"
 runuser -l vagrant -c "cd /data/www/mdot && npm rebuild node-sass --no-bin-links"
-runuser -l vagrant -c "cd /data/www/mdot && npm run build_local --no-bin-links"
+runuser -l vagrant -c "cd /data/www/mdot && npm run build:local --no-bin-links"
 
 chgrp -R www-data /data/www
 ln -s /data/www/api/tests/files /data/tmp/unittest
