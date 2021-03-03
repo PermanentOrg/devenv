@@ -42,15 +42,15 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in mdot docker website back-end; do git clone git@bitbucket.org:permanent-org/$r.git; done
-for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
+for r in docker website back-end; do git clone git@bitbucket.org:permanent-org/$r.git; done
+for r in infrastructure upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
 ```
 
 No repository access? Simply create the directories.
 ```
 cd ..
-for r in mdot docker website back-end/task-runner back-end/library back-end/api back-end/daemon log; do mkdir -p $r; done
+for r in web-app/dist docker website back-end/task-runner back-end/library back-end/api back-end/daemon log; do mkdir -p $r; done
 for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg/$r.git; done
 ```
 
@@ -66,7 +66,18 @@ source .env && vagrant up
 
 Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
 
-8. Load the website at https://local.permanent.org/. If you wish to sign up for an account, do that from the form on https://local.permanent.org/app. It's not possible to create an account locally on https://local.permanent.org/login because this form is an iframe pointing to our production instance.
+8. Build the front-end: `npm run build:local`. For performance and
+   compatibility reasons, we do not build the static assets during vagrant
+   provisioning; instead, the Apache instance inside vagrant serves the assets
+   built on the host located in the peer directory `web-app/dist`. See the
+   [web-app](https://github.com/PermanentOrg/web-app) repo for more
+   information.
+
+9. Load the website at https://local.permanent.org/. If you wish to sign up for
+   an account, do that from the form on https://local.permanent.org/app. It's
+   not possible to create an account locally on
+   https://local.permanent.org/login because this form is an iframe pointing to
+   our production instance.
 
 
 ## Troubleshooting
