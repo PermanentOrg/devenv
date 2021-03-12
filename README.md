@@ -99,7 +99,7 @@ vagrant plugin install vagrant-vbguest
 
 ## Contributing
 
-Contributors to this repository agree to adhere to the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). To report violations, get in touch with engineers@permanent.org.
+Contributors to this repository agree to adhere to the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). To report violations, get in touch with engineers@permanent.org. 
 
 ## Security
 
