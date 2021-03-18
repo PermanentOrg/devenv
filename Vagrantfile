@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../back-end/task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
-  config.vm.synced_folder "../web-app", "/data/www/mdot", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../web-app/dist", "/data/www/mdot/dist", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../upload-service", "/data/www/upload-service", owner: "vagrant", group: "www-data"
 
   # Provider-specific configuration so you can fine-tune various
@@ -53,7 +53,7 @@ Vagrant.configure(2) do |config|
   #
   config.vm.provider "virtualbox" do |vb|
     vb.customize ["modifyvm", :id, "--ioapic", "on"]
-    vb.memory = "4096"
+    vb.memory = "2048"
     vb.cpus = 2
     vb.linked_clone = true
   end
