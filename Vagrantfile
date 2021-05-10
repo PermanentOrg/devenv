@@ -81,6 +81,6 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: "sudo service process-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service sqs-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service video-daemon restart", run: "always"
-  config.vm.provision "shell", inline: "sudo service node-upload restart", run: "always"
+  config.vm.provision "shell", inline: "sudo service upload restart", run: "always"
   config.vm.post_up_message = "Finished! App running at https://local.permanent.org/"
 end
