@@ -8,6 +8,9 @@ echo "Install essential software pacakges"
 apt-get -qq update
 apt-get -qq install -y git openssl libssl-dev
 
+echo "Install developer packages"
+apt-get -qq install -y byobu
+
 echo "Configure AWS SQS access"
 
 if [[ "$SQS_IDENT" != _* ]]
