@@ -38,6 +38,7 @@ Vagrant.configure(2) do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   config.vm.synced_folder "../back-end/api", "/data/www/api", owner: "vagrant", group: "www-data"
+  config.vm.synced_folder "../back-end", "/data/www/back-end", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/library", "/data/www/library", owner: "vagrant", group: "www-data"
