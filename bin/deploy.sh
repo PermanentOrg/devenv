@@ -8,6 +8,9 @@ echo "Install essential software pacakges"
 apt-get -qq update
 apt-get -qq install -y git openssl libssl-dev
 
+echo "Install developer packages"
+apt-get -qq install -y byobu
+
 echo "Configure AWS SQS access"
 
 if [[ "$SQS_IDENT" != _* ]]
@@ -26,6 +29,8 @@ fi
 
 echo "Install mysql server and memcache"
 apt-get -qq install -y mysql-server memcached
+echo 'bind "^U" vi-kill-line-prev' >> ~root/.editrc
+echo 'bind "^W" ed-delete-prev-word' >> ~root/.editrc
 
 echo "Configure apache"
 runuser -l vagrant -c "aws s3 cp --recursive s3://permanent-local/certs /tmp/certs"
