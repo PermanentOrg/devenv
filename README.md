@@ -59,19 +59,36 @@ for r in infrastructure upload-service; do git clone git@github.com:PermanentOrg
 printf "\n192.168.33.10 local.permanent.org" | sudo tee -a /etc/hosts
 ```
 
-7. Run the following command to bring a development environment for the first time, or to start up a halted VM.
+7. Build the front-end.
+   ```
+   cd ../web-app
+   npm install
+   cp .env.template .env
+   npm run build:local
+   ```
+
+   For performance and compatibility reasons, we do not build the static assets
+   during vagrant provisioning; instead, the Apache instance inside vagrant
+   serves the assets built on the host located in the peer directory
+   `web-app/dist`. See the [web-app](https://github.com/PermanentOrg/web-app)
+   repo for more information.
+
+8. Run the following command to bring a development environment for the first
+time, or to start up a halted VM.
 ```
 source .env && vagrant up
 ```
 
 Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
 
-8. Build the front-end: `npm run build:local`. For performance and
-   compatibility reasons, we do not build the static assets during vagrant
-   provisioning; instead, the Apache instance inside vagrant serves the assets
-   built on the host located in the peer directory `web-app/dist`. See the
-   [web-app](https://github.com/PermanentOrg/web-app) repo for more
-   information.
+9. Run the database migrations.
+```
+vagrant ssh
+cd /data/www/back-end
+php library/bin/composer.phar install --working-dir=library
+cd library
+php migrate.php
+```
 
 9. Load the website at https://local.permanent.org/. If you wish to sign up for
    an account, do that from the form on https://local.permanent.org/app. It's
@@ -79,6 +96,10 @@ Vagrant will only provision your VM on the first run of `vagrant up`. Every subs
    https://local.permanent.org/login because this form is an iframe pointing to
    our production instance.
 
+10. When you're done working on the dev environment, bring it down.
+```
+vagrant suspend
+```
 
 ## Troubleshooting
 
