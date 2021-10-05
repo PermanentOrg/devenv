@@ -81,15 +81,6 @@ source .env && vagrant up
 
 Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
 
-9. Run the database migrations.
-```
-vagrant ssh
-cd /data/www/back-end
-php library/bin/composer.phar install --working-dir=library
-cd library
-php migrate.php
-```
-
 9. Load the website at https://local.permanent.org/. If you wish to sign up for
    an account, do that from the form on https://local.permanent.org/app. It's
    not possible to create an account locally on
