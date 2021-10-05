@@ -96,6 +96,9 @@ ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
 
 echo -e "* * * * *\troot\tcd / && run-parts --report /etc/cron.minute" >> /etc/crontab
 
+echo "Run database migrations"
+runuser -l vagrant -c "cd /data/www/library && php migrate.php"
+
 echo "**********************************************************"
 echo "**********************************************************"
 echo "**********************************************************"
