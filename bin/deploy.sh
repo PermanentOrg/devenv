@@ -47,8 +47,6 @@ then
     echo "Populate MySQL"
     service mysql restart
     sudo mysql < /data/www/docker/database/perm.sql
-    sudo mysql < /data/www/website/database/wp.sql
-    sudo mysql wp < /data/www/website/database/dump.sql
 fi
 
 echo "Configure upload service"
@@ -66,12 +64,6 @@ runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --n
 
 chgrp -R www-data /data/www
 ln -s /data/www/api/tests/files /data/tmp/unittest
-
-echo "Install wp-cli"
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
-runuser -l vagrant -c "curl -O https://raw.githubusercontent.com/wp-cli/wp-cli/v2.4.0/utils/wp-completion.bash && mv wp-completion.bash ~/.bash_completion"
 
 echo "Configure services and cronjobs"
 
