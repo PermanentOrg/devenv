@@ -43,7 +43,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "../back-end/daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/library", "/data/www/library", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../website", "/data/www/website", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../log", "/var/log/permanent", owner: "vagrant", group: "www-data", mount_options: ["dmode=770", "fmode=660"]
   config.vm.synced_folder "../web-app/dist", "/data/www/mdot/dist", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../upload-service", "/data/www/upload-service", owner: "vagrant", group: "www-data"
@@ -83,5 +82,5 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: "sudo service sqs-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service video-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service upload restart", run: "always"
-  config.vm.post_up_message = "Finished! App running at https://local.permanent.org/"
+  config.vm.post_up_message = "Finished! App running at https://local.permanent.org/app"
 end
