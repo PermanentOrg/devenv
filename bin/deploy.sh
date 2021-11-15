@@ -46,7 +46,7 @@ if $DELETE_DATA
 then
     echo "Populate MySQL"
     service mysql restart
-    sudo mysql < /data/www/docker/library/base.sql
+    sudo mysql < /data/www/library/base.sql
 fi
 
 echo "Configure upload service"

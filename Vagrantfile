@@ -39,7 +39,6 @@ Vagrant.configure(2) do |config|
   # argument is a set of non-required options.
   config.vm.synced_folder "../back-end/api", "/data/www/api", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end", "/data/www/back-end", owner: "vagrant", group: "www-data"
-  config.vm.synced_folder "../docker", "/data/www/docker", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/daemon", "/data/www/daemon", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/library", "/data/www/library", owner: "vagrant", group: "www-data"
   config.vm.synced_folder "../back-end/task-runner", "/data/www/task-runner", owner: "vagrant", group: "www-data"
