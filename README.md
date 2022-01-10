@@ -87,11 +87,18 @@ Vagrant will only provision your VM on the first run of `vagrant up`. Every subs
 vagrant suspend
 ```
 
-## Synchronization
+## Helpers
 
-The devenv relies on several repositories to run correctly, so to checkout the latest copy of each repository needed by devenv run `./bin/repo-sync.sh`.
+#### Repo-Sync Script
+---
 
-It's also a good first thing to do, if you into any issues with your environment!
+The repo sync script essentially helps you stay up to date with work going on across the multiple devenv repos.
+
+* Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
+
+* Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
+
+* *Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository.*
 
 ## Troubleshooting
 
