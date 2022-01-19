@@ -42,7 +42,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in back-end infrastructure upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
+for r in back-end infrastructure notification-service upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
 ```
 
