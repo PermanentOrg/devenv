@@ -42,7 +42,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
  5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 ```
 cd ..
-for r in back-end infrastructure upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
+for r in back-end infrastructure notification-service upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
 ```
 
@@ -86,6 +86,19 @@ Vagrant will only provision your VM on the first run of `vagrant up`. Every subs
 ```
 vagrant suspend
 ```
+
+## Helpers
+
+#### Repo-Sync Script
+---
+
+The repo sync script essentially helps you stay up to date with work going on across the multiple devenv repos.
+
+* Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
+
+* Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
+
+* *Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository.*
 
 ## Troubleshooting
 
