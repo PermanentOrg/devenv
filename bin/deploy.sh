@@ -41,6 +41,8 @@ a2enmod proxy_http
 a2enmod ssl
 service apache2 start
 
+echo "Grant default user access to system logs"
+adduser vagrant adm
 
 if $DELETE_DATA
 then
