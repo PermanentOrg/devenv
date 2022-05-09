@@ -65,6 +65,10 @@ runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --n
 chgrp -R www-data /data/www
 ln -s /data/www/api/tests/files /data/tmp/unittest
 
+echo "Configure PHP linting"
+runuser -l vagrant -c "cd /data/www/back-end && php library/bin/composer.phar install --prefer-dist --working-dir=tools/phplint"
+runuser -l vagrant -c "cd /data/www/back-end && php library/bin/composer.phar install --prefer-dist --working-dir=tools/php-cs-fixer"
+
 echo "Configure services and cronjobs"
 
 ln -s --force /data/www/daemon/scripts/queue-daemon.service /etc/systemd/system/
