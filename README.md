@@ -72,9 +72,10 @@ printf "\n192.168.33.10 local.permanent.org" | sudo tee -a /etc/hosts
    `web-app/dist`. See the [web-app](https://github.com/PermanentOrg/web-app)
    repo for more information.
 
-8. Run the following command to bring a development environment for the first
+8. Return to `devenv` and run the following command to bring a development environment for the first
 time, or to start up a halted VM.
 ```
+cd ../devenv
 source .env && vagrant up
 ```
 
