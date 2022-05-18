@@ -63,7 +63,7 @@ rm -rf vendor/
 runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --no-plugins"
 
 chgrp -R www-data /data/www
-ln -s /data/www/api/tests/files /data/tmp/unittest
+mkdir /data/tmp/unittest
 
 echo "Configure PHP linting"
 runuser -l vagrant -c "cd /data/www/back-end && php library/bin/composer.phar install --prefer-dist --working-dir=tools/phplint"
