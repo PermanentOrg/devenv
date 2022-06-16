@@ -12,7 +12,8 @@ apt-get -qq install -y \
   libssl-dev \
   memcached \
   mysql-server \
-  openssl
+  openssl \
+  postgresql-14
 
 echo "Configure AWS SQS access"
 
@@ -50,6 +51,11 @@ then
     echo "Populate MySQL"
     service mysql restart
     sudo mysql < /data/www/library/base.sql
+
+    sudo -u postgres createuser vagrant
+    sudo -u postgres createuser www-data
+    sudo -u postgres createdb --owner=www-data permanent
+    sudo -u postgres psql -c 'GRANT ALL ON DATABASE permanent TO vagrant;'
 fi
 
 echo "Configure upload service"
@@ -97,7 +103,8 @@ ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
 echo -e "* * * * *\troot\tcd / && run-parts --report /etc/cron.minute" >> /etc/crontab
 
 echo "Run database migrations"
-runuser -l vagrant -c "cd /data/www/library && php migrate.php"
+runuser -l vagrant -c "cd /data/www/library && php migrate-mysql.php"
+runuser -l vagrant -c "cd /data/www/library && php migrate-postgresql.php"
 
 echo "**********************************************************"
 echo "**********************************************************"
