@@ -64,6 +64,7 @@ runuser -l vagrant -c "cd /data/www/library && php bin/composer.phar install --n
 
 chgrp -R www-data /data/www
 mkdir /data/tmp/unittest
+chmod -R 777 /data/tmp/unittest
 
 echo "Configure PHP linting"
 runuser -l vagrant -c "cd /data/www/back-end && php library/bin/composer.phar install --prefer-dist --working-dir=tools/phplint"
