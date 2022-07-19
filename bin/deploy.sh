@@ -4,12 +4,15 @@ export DEBIAN_FRONTEND=noninteractive
 echo "localdev" > /etc/hostname
 echo "127.0.0.1 localdev" >> /etc/hosts
 
-echo "Install essential software pacakges"
-apt-get -qq update
-apt-get -qq install -y git openssl libssl-dev
-
 echo "Install developer packages"
-apt-get -qq install -y byobu
+apt-get -qq update
+apt-get -qq install -y \
+  byobu \
+  git \
+  libssl-dev \
+  memcached \
+  mysql-server \
+  openssl
 
 echo "Configure AWS SQS access"
 
@@ -27,8 +30,6 @@ then
     runuser -l vagrant -c "aws s3 rm s3://permanent-local/$SQS_IDENT --recursive"
 fi
 
-echo "Install mysql server and memcache"
-apt-get -qq install -y mysql-server memcached
 echo 'bind "^U" vi-kill-line-prev' >> ~root/.editrc
 echo 'bind "^W" ed-delete-prev-word' >> ~root/.editrc
 
