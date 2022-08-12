@@ -50,12 +50,12 @@ if $DELETE_DATA
 then
     echo "Populate MySQL"
     service mysql restart
-    sudo mysql < /data/www/library/base.sql
+    sudo mysql < /data/www/library/mysql-base.sql
 
-    sudo -u postgres createuser vagrant
+    sudo -u postgres psql -c "CREATE ROLE vagrant WITH LOGIN SUPERUSER PASSWORD 'localdb'";
     sudo -u postgres createuser www-data
     sudo -u postgres createdb --owner=www-data permanent
-    sudo -u postgres psql -c 'GRANT ALL ON DATABASE permanent TO vagrant;'
+    sudo -u postgres psql -d permanent -f /data/www/library/postgres-base.sql
 fi
 
 echo "Configure upload service"
@@ -103,8 +103,8 @@ ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
 echo -e "* * * * *\troot\tcd / && run-parts --report /etc/cron.minute" >> /etc/crontab
 
 echo "Run database migrations"
-runuser -l vagrant -c "cd /data/www/library && php migrate-mysql.php"
-runuser -l vagrant -c "cd /data/www/library && php migrate-postgresql.php"
+runuser -l vagrant -c "cd /data/www/library && php mysql-migrate.php"
+# runuser -l vagrant -c "cd /data/www/library && php postgresql-migrate.php"
 
 echo "**********************************************************"
 echo "**********************************************************"
