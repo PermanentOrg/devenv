@@ -12,7 +12,8 @@ apt-get -qq install -y \
   libssl-dev \
   memcached \
   mysql-server \
-  openssl
+  openssl \
+  postgresql-14
 
 echo "Configure AWS SQS access"
 
@@ -50,6 +51,11 @@ then
     echo "Populate MySQL"
     service mysql restart
     sudo mysql < /data/www/library/base.sql
+
+    sudo -u postgres psql -c "CREATE ROLE vagrant WITH LOGIN SUPERUSER PASSWORD 'localdb'";
+    sudo -u postgres createuser www-data
+    sudo -u postgres createdb --owner=www-data permanent
+    sudo -u postgres psql -d permanent -f /data/www/library/postgres-base.sql
 fi
 
 echo "Configure upload service"
