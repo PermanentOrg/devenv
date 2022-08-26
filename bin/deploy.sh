@@ -24,6 +24,7 @@ if [[ "$SQS_IDENT" != _* ]]
 fi
 
 echo $SQS_IDENT > /data/www/sqs.txt
+echo "mysql" > /data/www/dbchoice.txt
 
 if $DELETE_DATA
 then
