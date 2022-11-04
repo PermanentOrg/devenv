@@ -56,7 +56,7 @@ then
     sudo -u postgres psql -c "CREATE ROLE vagrant WITH LOGIN SUPERUSER PASSWORD 'localdb'";
     sudo -u postgres createuser www-data
     sudo -u postgres createdb --owner=www-data permanent
-    sudo -u postgres psql -d permanent -f /data/www/library/postgres-base.sql
+    sudo -u postgres psql -d permanent -f /data/www/library/postgresql/base.sql
 fi
 
 echo "Configure upload service"
