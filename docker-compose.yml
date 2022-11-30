@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  load_balancer:
+    image: nginx:alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/ssl:ro
+    ports:
+      - "443:443"
+    depends_on:
+      stela:
+        condition: service_healthy
+  stela:
+    restart: always
+    build:
+      context: ../stela
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8080:8080
+    env_file: 
+      - ../stela/.env
+    volumes:
+      - ../stela:/usr/local/apps/stela/dev
+      - ignore:/usr/local/apps/stela/dev/node_modules
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: curl http://localhost:8080/api/v2/health
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: permanent
+    healthcheck:
+      test: pg_isready
+    ports:
+      - "5432:5432"
+  database_setup:
+    image: postgres:14
+    volumes:
+      - ../stela/database/base.sql:/base.sql:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "SELECT 'CREATE DATABASE permanent' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'permanent')\gexec" | psql postgresql://postgres:permanent@database:5432
+        psql postgresql://postgres:permanent@database:5432/permanent -f /base.sql
+    depends_on:
+      database:
+        condition: service_healthy
+volumes:
+  ignore:
