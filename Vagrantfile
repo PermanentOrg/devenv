@@ -65,14 +65,18 @@ Vagrant.configure(2) do |config|
     env: {"AWS_ACCESS_KEY_ID": ENV["AWS_ACCESS_KEY_ID"],
           "AWS_ACCESS_SECRET": ENV["AWS_ACCESS_SECRET"],
           "AWS_REGION": ENV["AWS_REGION"],
-          "UPLOAD_SERVICE_SENTRY_DSN": ENV["UPLOAD_SERVICE_SENTRY_DSN"],
+          "APP_USER": "vagrant",
+          "DATABASE_URL": ENV["DATABASE_URL"],
           "PERM_ENV": "local",
           "PERM_SUBDOMAIN": "local",
-          "APP_USER": "vagrant",
-          "TEMPLATES_PATH": "/tmp/templates"}
+          "TEMPLATES_PATH": "/tmp/templates",
+          "UPLOAD_SERVICE_SENTRY_DSN": ENV["UPLOAD_SERVICE_SENTRY_DSN"]
+         }
   config.vm.provision "shell", path: "bin/deploy.sh",
-    env: {"SQS_IDENT": ENV["SQS_IDENT"],
-          "DELETE_DATA": ENV["DELETE_DATA"]}
+    env: {"DATABASE_URL": ENV["DATABASE_URL"],
+          "DELETE_DATA": ENV["DELETE_DATA"],
+          "SQS_IDENT": ENV["SQS_IDENT"]
+          }
   config.vm.provision "shell", inline: "sudo systemctl daemon-reload", run: "always"
   config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
   config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"
