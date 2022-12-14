@@ -5,7 +5,7 @@ bring up a development environment for the Permanent Legacy Foundation
 website.
 
 Note: Many of the shared folders required to bring up the complete
-environment are not yet publicly available.  This will change.  We are
+environment are not yet publicly available. This will change. We are
 in the process of moving more code into public view, publishing it as
 open source, and streamlining our repository structure.
 
@@ -15,31 +15,45 @@ We use the latest Debian build published [here](https://app.vagrantup.com/generi
 
 ## Usage
 
-1. Install dependencies: [Vagrant](https://www.vagrantup.com/downloads) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
+1. Install dependencies:
+   [Vagrant](https://www.vagrantup.com/downloads)
+
 ```
 sudo apt install vagrant
+```
+
+[Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+
+```
 sudo apt install virtualbox
 ```
 
+and [Docker](https://docs.docker.com/engine/install/ubuntu/).
+
 2. Install [Virtualbox Guest Additions](https://www.virtualbox.org/manual/ch04.html) to support mounting shared folders.
+
 ```
 vagrant plugin install vagrant-vbguest
 ```
+
 If this command fails, check out [Troubleshooting](#troubleshooting) for suggestions.
 
 3. Create three [AWS SQS queues](https://aws.amazon.com/sqs/) (type: Standard) with the following names:
-- Local_Low_Priority_YourName
-- Local_Video_YourName
-- Local_High_Priority_YourName
+
+-  Local_Low_Priority_YourName
+-  Local_Video_YourName
+-  Local_High_Priority_YourName
 
 4. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
-    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
-    - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
-    - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
-    - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
-    - `UPLOAD_SERVICE_SENTRY_DSN` is optional and allows sentry configuration for the upload service.
 
- 5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
+   - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
+   - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
+   - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
+   - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
+   - `UPLOAD_SERVICE_SENTRY_DSN` is optional and allows sentry configuration for the upload service.
+
+5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
+
 ```
 cd ..
 for r in back-end infrastructure notification-service upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
@@ -47,6 +61,7 @@ mkdir log
 ```
 
 No repository access? Simply create the directories.
+
 ```
 cd ..
 for r in back-end/task-runner back-end/library back-end/api back-end/daemon log; do mkdir -p $r; done
@@ -54,11 +69,19 @@ for r in infrastructure upload-service web-app; do git clone git@github.com:Perm
 ```
 
 6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
+
 ```
-printf "\n192.168.33.10 local.permanent.org" | sudo tee -a /etc/hosts
+printf "\n127.0.0.1 local.permanent.org" | sudo tee -a /etc/hosts
 ```
 
-7. Build the front-end.
+7. Download the SSL certs for the `back-end` API server
+
+```
+source .env && aws s3 cp --recursive s3://permanent-local/certs ./certs
+```
+
+8. Build the front-end.
+
    ```
    cd ../web-app
    npm install
@@ -72,8 +95,9 @@ printf "\n192.168.33.10 local.permanent.org" | sudo tee -a /etc/hosts
    `web-app/dist`. See the [web-app](https://github.com/PermanentOrg/web-app)
    repo for more information.
 
-8. Return to `devenv` and run the following command to bring a development environment for the first
-time, or to start up a halted VM.
+9. Return to `devenv` and run the following command to bring a development environment for the first
+   time, or to start up a halted VM. This brings up the `back-end` API server and the frontend.
+
 ```
 cd ../devenv
 source .env && vagrant up
@@ -81,29 +105,47 @@ source .env && vagrant up
 
 Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
 
+10. Run the following command to bring up the database and the `stela` API server
+
+```
+docker-compose up -d
+```
+
 9. Load the website at https://local.permanent.org/app.
 
 10. When you're done working on the dev environment, bring it down.
+
 ```
 vagrant suspend
+```
+
+```
+docker-compose down
 ```
 
 ## Helpers
 
 #### Repo-Sync Script
+
 ---
 
 The repo sync script essentially helps you stay up to date with work going on across the multiple devenv repos.
 
-* Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
+-  Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
 
-* Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
+-  Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
 
-* *Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository.*
+-  _Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository._
 
 ## Troubleshooting
 
-Did you get this error?
+- `local.permanent.org/app` redirects the way we're used to, except that `local.permanent.org` gets replaced with the IP
+where the web app is running in the URL. You'll have to change this back to `local.permanent.org` or things won't work
+properly. `local.permanent.org/app/` avoids this.
+
+- Be sure you're accessing `https://local.permanent.org`, not `http://local.permanent.org`; the latter will not work
+
+- Did you get this error?
 
 ```
 /sbin/mount.vboxsf: mounting failed with the error: No such device
