@@ -79,7 +79,6 @@ Vagrant.configure(2) do |config|
           }
   config.vm.provision "shell", inline: "sudo systemctl daemon-reload", run: "always"
   config.vm.provision "shell", inline: "sudo service apache2 restart", run: "always"
-  config.vm.provision "shell", inline: "sudo service mysql restart", run: "always"
   config.vm.provision "shell", inline: "sudo service queue-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service process-daemon restart", run: "always"
   config.vm.provision "shell", inline: "sudo service sqs-daemon restart", run: "always"

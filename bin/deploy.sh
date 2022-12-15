@@ -10,9 +10,7 @@ apt-get -qq install -y \
   byobu \
   git \
   libssl-dev \
-  mysql-server \
-  openssl \
-  postgresql-14
+  openssl
 
 echo "Configure AWS SQS access"
 
@@ -23,7 +21,6 @@ if [[ "$SQS_IDENT" != _* ]]
 fi
 
 echo $SQS_IDENT > /data/www/sqs.txt
-echo "mysql" > /data/www/dbchoice.txt
 
 if $DELETE_DATA
 then
@@ -45,18 +42,6 @@ service apache2 start
 
 echo "Grant default user access to system logs"
 adduser vagrant adm
-
-if $DELETE_DATA
-then
-    echo "Populate MySQL"
-    service mysql restart
-    sudo mysql < /data/www/library/base.sql
-
-    sudo -u postgres psql -c "CREATE ROLE vagrant WITH LOGIN SUPERUSER PASSWORD 'localdb'";
-    sudo -u postgres createuser www-data
-    sudo -u postgres createdb --owner=www-data permanent
-    sudo -u postgres psql -d permanent -f /data/www/library/postgresql/base.sql
-fi
 
 echo "Configure upload service"
 cd /data/www/upload-service
