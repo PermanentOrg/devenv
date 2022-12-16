@@ -30,6 +30,8 @@ sudo apt install virtualbox
 
 and [Docker](https://docs.docker.com/engine/install/ubuntu/).
 
+As well as the [AWS CLI.](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html)
+
 2. Install [Virtualbox Guest Additions](https://www.virtualbox.org/manual/ch04.html) to support mounting shared folders.
 
 ```
