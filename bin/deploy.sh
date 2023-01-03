@@ -10,7 +10,6 @@ apt-get -qq install -y \
   byobu \
   git \
   libssl-dev \
-  memcached \
   mysql-server \
   openssl \
   postgresql-14
