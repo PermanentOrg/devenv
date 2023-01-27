@@ -143,9 +143,11 @@ The repo sync script essentially helps you stay up to date with work going on ac
 
 - `local.permanent.org/app` redirects the way we're used to, except that `local.permanent.org` gets replaced with the IP
 where the web app is running in the URL. You'll have to change this back to `local.permanent.org` or things won't work
-properly. `local.permanent.org/app/` avoids this.
+properly. `local.permanent.org/app/` avoids this. If you are getting a CORS error, then the above redirection could have 
+caused it. 
 
 - Be sure you're accessing `https://local.permanent.org`, not `http://local.permanent.org`; the latter will not work
+
 
 - Did you get this error?
 
