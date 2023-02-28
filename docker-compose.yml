@@ -17,7 +17,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 8080:8080
-    env_file: 
+    env_file:
       - ../stela/.env
     volumes:
       - ../stela:/usr/local/apps/stela/dev
@@ -32,7 +32,7 @@ services:
     ports:
       - "11211:11211"
   database:
-    image: postgres:14
+    image: postgres:14-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: permanent
@@ -41,14 +41,19 @@ services:
     ports:
       - "5432:5432"
   database_setup:
-    image: postgres:14
+    image: postgres:14-alpine
     volumes:
       - ../stela/database/base.sql:/base.sql:ro
+      - ../back-end/library/db:/db:ro
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
         echo "SELECT 'CREATE DATABASE permanent' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'permanent')\gexec" | psql postgresql://postgres:permanent@database:5432
         psql postgresql://postgres:permanent@database:5432/permanent -f /base.sql
+        apk add curl
+        curl -L -o /usr/local/bin/dbmate https://github.com/amacneil/dbmate/releases/download/v1.16.0/dbmate-linux-amd64
+        chmod +x /usr/local/bin/dbmate
+        (dbmate --url postgresql://postgres:permanent@database:5432/permanent?sslmode=disable up)
     depends_on:
       database:
         condition: service_healthy

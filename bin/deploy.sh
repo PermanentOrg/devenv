@@ -87,16 +87,6 @@ ln -s --force /data/www/task-runner/scripts/minute/* /etc/cron.minute/
 
 echo -e "* * * * *\troot\tcd / && run-parts --report /etc/cron.minute" >> /etc/crontab
 
-if [ -z "$DATABASE_URL" ]
-then
-    echo "ERROR! Missing environment variable: DATABASE_URL"
-    exit 1
-fi
-
-echo "Run database migrations"
-cd /data/www/back-end/library
-dbmate up
-
 echo "**********************************************************"
 echo "**********************************************************"
 echo "**********************************************************"
