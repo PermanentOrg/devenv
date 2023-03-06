@@ -58,7 +58,7 @@ If this command fails, check out [Troubleshooting](#troubleshooting) for suggest
 
 ```
 cd ..
-for r in back-end infrastructure notification-service upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
+for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
 mkdir log
 ```
 
@@ -67,7 +67,7 @@ No repository access? Simply create the directories.
 ```
 cd ..
 for r in back-end/task-runner back-end/library back-end/api back-end/daemon log; do mkdir -p $r; done
-for r in infrastructure upload-service web-app; do git clone git@github.com:PermanentOrg/$r.git; done
+for r in infrastructure upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
 ```
 
 6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
