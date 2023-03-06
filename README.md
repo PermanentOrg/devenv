@@ -141,6 +141,9 @@ The repo sync script essentially helps you stay up to date with work going on ac
 
 ## Troubleshooting
 
+- If running `docker compose up` results in an error due to port 80 being in use already, you likely need to turn off
+apache, which runs by default on many distros.
+
 - `local.permanent.org/app` redirects the way we're used to, except that `local.permanent.org` gets replaced with the IP
 where the web app is running in the URL. You'll have to change this back to `local.permanent.org` or things won't work
 properly. `local.permanent.org/app/` avoids this. If you are getting a CORS error, then the above redirection could have 
