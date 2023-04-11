@@ -43,7 +43,7 @@ services:
   database_setup:
     image: postgres:14-alpine
     volumes:
-      - ../stela/database/base.sql:/base.sql:ro
+      - ../back-end/library/postgresql/base.sql:/base.sql:ro
       - ../back-end/library/db:/db:ro
     entrypoint: ["/bin/sh", "-c"]
     command:
