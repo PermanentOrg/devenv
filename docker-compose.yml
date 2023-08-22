@@ -15,14 +15,14 @@ services:
     restart: always
     build:
       context: ../stela
-      dockerfile: Dockerfile.dev
+      dockerfile: apps/api/Dockerfile.dev
     ports:
       - "8080:8080"
     env_file:
       - ../stela/.env
     volumes:
-      - ../stela:/usr/local/apps/stela/dev
-      - ignore:/usr/local/apps/stela/dev/node_modules
+      - ../stela/apps/api:/usr/local/apps/stela/apps/api/dev
+      - ignore:/usr/local/apps/stela/apps/api/dev/node_modules
     depends_on:
       database:
         condition: service_healthy
