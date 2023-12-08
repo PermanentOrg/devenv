@@ -21,8 +21,8 @@ services:
     env_file:
       - ../stela/.env
     volumes:
-      - ../stela:/usr/local/apps/stela/dev
-      - ignore:/usr/local/apps/stela/dev/node_modules
+      - ../stela:/usr/local/apps/stela/
+      - ignore:/usr/local/apps/stela/node_modules
     depends_on:
       database:
         condition: service_healthy
