@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "generic/debian10"
+  config.vm.box = "generic/debian11"
   config.vm.box_version = "3.4.0"
   config.vm.define "permanent"
 
