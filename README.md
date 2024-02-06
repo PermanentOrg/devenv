@@ -97,7 +97,13 @@ source .env && aws s3 cp --recursive s3://permanent-local/certs ./certs
    `web-app/dist`. See the [web-app](https://github.com/PermanentOrg/web-app)
    repo for more information.
 
-9. Return to `devenv` and run the following command to bring a development environment for the first
+9. Build `stela`
+```
+cd ../stela
+npm run build -ws
+```
+
+10. Return to `devenv` and run the following command to bring a development environment for the first
    time, or to start up a halted VM. This brings up the `back-end` API server and the frontend.
 
 ```
@@ -107,15 +113,15 @@ source .env && vagrant up
 
 Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
 
-10. Run the following command to bring up the database and the `stela` API server
+11. Run the following command to bring up the database and the `stela` API server
 
 ```
 docker-compose up -d
 ```
 
-9. Load the website at https://local.permanent.org/app.
+12. Load the website at https://local.permanent.org/app.
 
-10. When you're done working on the dev environment, bring it down.
+13. When you're done working on the dev environment, bring it down.
 
 ```
 vagrant suspend
