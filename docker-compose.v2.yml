@@ -19,3 +19,5 @@ services:
           cpus: "1.0"
 # [valle] command to force build before setting up
 # docker-compose -f docker-compose.v2.yml up --build
+# docker-compose -f docker-compose.v2.yml build | tee ../build.log && docker-compose -f docker-compose.v2.yml up
+# docker-compose -f docker-compose.v2.yml build --no-cache | tee ../build.log && docker-compose -f docker-compose.v2.yml up
