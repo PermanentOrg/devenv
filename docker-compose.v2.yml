@@ -1,0 +1,21 @@
+version: "3.7"
+name: valle-back-end-test
+services:
+  back-end-php:
+    build:
+      context: ../
+      dockerfile: back-end/Dockerfile.v2
+    image: permanent-test
+    ports:
+      - 80:80
+      - 443:443
+    env_file:
+      - .env
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+        reservations:
+          cpus: "1.0"
+# [valle] command to force build before setting up
+# docker-compose -f docker-compose.v2.yml up --build
