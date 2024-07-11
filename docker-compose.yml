@@ -1,5 +1,21 @@
 version: "3.7"
 services:
+  back-end-php:
+    build:
+      context: ../
+      dockerfile: back-end/Dockerfile.v2
+    image: permanent-test
+    env_file:
+      - .env
+    depends_on:
+      database:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+        reservations:
+          cpus: "1.0"
   load_balancer:
     image: nginx:alpine
     volumes:
@@ -9,6 +25,8 @@ services:
       - "443:443"
       - "80:80"
     depends_on:
+      "back-end-php":
+        condition: service_started
       stela:
         condition: service_healthy
   stela:
@@ -64,3 +82,5 @@ volumes:
   ignore_module:
   ignore_api:
   ignore_logger:
+#  docker compose up --force-recreate
+#  https://local.permanent.org/app
