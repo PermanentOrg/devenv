@@ -26,7 +26,7 @@ services:
       - "80:80"
     depends_on:
       "back-end-php":
-        condition: service_started
+        condition: service_started # TODO -> switch to service_healthy
       stela:
         condition: service_healthy
   stela:
