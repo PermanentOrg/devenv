@@ -32,7 +32,6 @@ services:
     build:
       context: ../
       dockerfile: back-end/Dockerfile.dev3
-      # TODO -> see if args are needed
       args:
         # these args are available because of the .env file located next to the docker-compose.yml file
         # which is automatically incorporated by docker
@@ -41,12 +40,17 @@ services:
         AWS_ACCESS_SECRET: ${AWS_ACCESS_SECRET}
         AWS_REGION: ${AWS_REGION}
         SQS_IDENT: ${SQS_IDENT}
+        UPLOAD_SERVICE_SENTRY_DSN: ${UPLOAD_SERVICE_SENTRY_DSN}
+        NOTIFICATION_DATABASE_URL: ${NOTIFICATION_DATABASE_URL}
+        NOTIFICATION_FIREBASE_CREDENTIALS: ${NOTIFICATION_FIREBASE_CREDENTIALS}
     image: back-end
     env_file:
-      # env file path seems relative to docker-compose file
+      # env file path is relative to docker-compose file
+      # Availability of env vars at build and during run requires separate configs.
       - ./.env
     volumes:
       - ../back-end/api:/data/www/api
+      - ../log:/var/log/permanent
       # - ../back-end/library:/data/www/library
     depends_on:
       database:
