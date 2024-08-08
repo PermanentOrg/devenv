@@ -31,7 +31,7 @@ services:
   back-end:
     build:
       context: ../
-      dockerfile: back-end/Dockerfile.dev3
+      dockerfile: back-end/Dockerfile.dev
       args:
         # these args are available because of the .env file located next to the docker-compose.yml file
         # which is automatically incorporated by docker
