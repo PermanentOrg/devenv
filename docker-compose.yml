@@ -19,9 +19,8 @@ services:
       dockerfile: web-app/Dockerfile.local
     command: npm run dev:docker
     image: web-app
-    depends_on:
-      database:
-        condition: service_healthy
+    volumes:
+      - ../web-app/src:/usr/app/src:ro
   back-end:
     build:
       context: ../
@@ -45,7 +44,6 @@ services:
     volumes:
       - ../back-end/api:/data/www/api
       - ../log:/var/log/permanent
-      # - ../back-end/library:/data/www/library
     depends_on:
       database:
         condition: service_healthy
