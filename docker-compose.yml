@@ -16,14 +16,8 @@ services:
   web-app:
     build:
       context: ../
-      dockerfile: web-app/Dockerfile.dev
-      args:
-        # these args are available because of the .env file located next to the docker-compose.yml file
-        # which is automatically incorporated by docker
-        AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-        AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-        AWS_ACCESS_SECRET: ${AWS_ACCESS_SECRET}
-        AWS_REGION: ${AWS_REGION}
+      dockerfile: web-app/Dockerfile.local
+    command: npm run dev:docker
     image: web-app
     depends_on:
       database:
