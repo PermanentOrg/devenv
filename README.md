@@ -15,121 +15,70 @@ We use the latest Debian build published [here](https://app.vagrantup.com/generi
 
 ## Usage
 
-1. Install dependencies:
-   [Vagrant](https://www.vagrantup.com/downloads)
+1. Prerequisites
 
-```
-sudo apt install vagrant
-```
+   - Install [Docker](https://docs.docker.com/get-docker/)
+   - Install npm and node (most packages require node 18)
+   - Access to AWS
+   - Access to Fusionauth OR the values of the env variables that need to be set up for Fusionauth to work.
+   - Access to repositories `back-end`, `infrastructure`, `notification-service`, `upload-service`, `web-app`, `stela`
 
-[Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+1. Create three [AWS SQS queues](https://aws.amazon.com/sqs/) (type: Standard) with the following names:
 
-```
-sudo apt install virtualbox
-```
+   - Local_Low_Priority_YourName
+   - Local_Video_YourName
+   - Local_High_Priority_YourName
 
-and [Docker](https://docs.docker.com/engine/install/ubuntu/).
+1. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 
-As well as the [AWS CLI.](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html)
+   ```bash
+   cd ..
+   for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
+   ```
 
-2. Install [Virtualbox Guest Additions](https://www.virtualbox.org/manual/ch04.html) to support mounting shared folders.
+1. create log folder next to the repo folders. where the backend container's logs folder will be mounted for easy access.
 
-```
-vagrant plugin install vagrant-vbguest
-```
+   ```bash
+   mkdir log
+   ```
 
-If this command fails, check out [Troubleshooting](#troubleshooting) for suggestions.
-
-3. Create three [AWS SQS queues](https://aws.amazon.com/sqs/) (type: Standard) with the following names:
-
--  Local_Low_Priority_YourName
--  Local_Video_YourName
--  Local_High_Priority_YourName
-
-4. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
+1. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
+   You will need to do this for both this repo and the `stela` and `web-app` repos, as they both have the `.env` file referenced in
+   the docker compose file.
 
    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
    - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
    - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
-   - `DELETE_DATA` removes stateful data if `true` (e.g. S3 files and the contents of the database). This should be `true` for the first `vagrant up`, which runs the provisioner, and can be `true` or `false` for subsequent calls with the `--provision` flag.
    - `UPLOAD_SERVICE_SENTRY_DSN` is optional and allows sentry configuration for the upload service.
+   - `NOTIFICATION_DATABASE_URL` and `NOTIFICATION_FIREBASE_CREDENTIALS` are required for the notification service
 
-5. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
+1. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
 
-```
-cd ..
-for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
-mkdir log
-```
-
-No repository access? Simply create the directories.
-
-```
-cd ..
-for r in back-end/task-runner back-end/library back-end/api back-end/daemon log; do mkdir -p $r; done
-for r in infrastructure upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
-```
-
-6. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
-
-```
-printf "\n127.0.0.1 local.permanent.org" | sudo tee -a /etc/hosts
-```
-
-7. Download the SSL certs for the `back-end` API server
-
-```
-source .env && aws s3 cp --recursive s3://permanent-local/certs ./certs
-```
-
-8. Build the front-end.
-
-   ```
-   cd ../web-app
-   npm install
-   cp .env.template .env
-   npm run build:local
+   ```bash
+   printf "\n127.0.0.1 local.permanent.org" | sudo tee -a /etc/hosts
    ```
 
-   For performance and compatibility reasons, we do not build the static assets
-   during vagrant provisioning; instead, the Apache instance inside vagrant
-   serves the assets built on the host located in the peer directory
-   `web-app/dist`. See the [web-app](https://github.com/PermanentOrg/web-app)
-   repo for more information.
+<!-- 1. Build `stela`
 
-9. Build `stela`
-```
-cd ../stela
-npm run build -ws
-```
+   ```
+   cd ../stela
+   npm run build -ws
+   ``` -->
 
-10. Return to `devenv` and run the following command to bring a development environment for the first
-   time, or to start up a halted VM. This brings up the `back-end` API server and the frontend.
+1. Return to `devenv` and run the following command to bring a development environment for the first
+   time, or to start up a halted VMs.
 
-```
-cd ../devenv
-source .env && vagrant up
-```
+   ```bash
+   docker-compose up -d
+   ```
 
-Vagrant will only provision your VM on the first run of `vagrant up`. Every subsequent time, you must pass the `--provision` [flag](https://www.vagrantup.com/docs/cli/up#no-provision) to force a provisioner to run. This may be useful to install changes to the development environment, or wipe stateful data with the `DELETE_DATA` environment variable (see step 4 above). For more information about working with vagrant, check out [the docs](https://www.vagrantup.com/docs).
+1. Load the website at https://local.permanent.org/app.
 
-11. Run the following command to bring up the database and the `stela` API server
+1. When you're done working on the dev environment, bring it down.
 
-```
-docker-compose up -d
-```
-
-12. Load the website at https://local.permanent.org/app.
-
-13. When you're done working on the dev environment, bring it down.
-
-```
-vagrant suspend
-```
-
-```
-docker-compose down
-```
+   ```bash
+   docker-compose down
+   ```
 
 ## Helpers
 
@@ -139,50 +88,23 @@ docker-compose down
 
 The repo sync script essentially helps you stay up to date with work going on across the multiple devenv repos.
 
--  Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
+- Run `./bin/repo-sync.sh` to pull the latest updates from all devenv repos at once.
 
--  Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
+- Observe the terminal and see what repositories actually recieve updates, this is important to know whether you might need an environment rebuild as in the case of changes in the Infrastructure repository.
 
--  _Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository._
+- _Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository._
 
 ## Troubleshooting
 
 - If running `docker compose up` results in an error due to port 80 being in use already, you likely need to turn off
-apache, which runs by default on many distros.
+  apache, which runs by default on many distros.
 
 - `local.permanent.org/app` redirects the way we're used to, except that `local.permanent.org` gets replaced with the IP
-where the web app is running in the URL. You'll have to change this back to `local.permanent.org` or things won't work
-properly. `local.permanent.org/app/` avoids this. If you are getting a CORS error, then the above redirection could have 
-caused it. 
+  where the web app is running in the URL. You'll have to change this back to `local.permanent.org` or things won't work
+  properly. `local.permanent.org/app/` avoids this. If you are getting a CORS error, then the above redirection could have
+  caused it.
 
 - Be sure you're accessing `https://local.permanent.org`, not `http://local.permanent.org`; the latter will not work
-
-
-- Did you get this error?
-
-```
-/sbin/mount.vboxsf: mounting failed with the error: No such device
-Vagrant was unable to mount VirtualBox shared folders. This is usually
-because the filesystem "vboxsf" is not available. This filesystem is
-made available via the VirtualBox Guest Additions and kernel module.
-Please verify that these guest additions are properly installed in the
-guest. This is not a bug in Vagrant and is usually caused by a faulty
-Vagrant box. For context, the command attempted was:
-
-mount -t vboxsf -o uid=1000,gid=1000 data_www_api /data/www/api
-
-The error output from the command was:
-
-/sbin/mount.vboxsf: mounting failed with the error: No such device
-
-```
-
-This likely means that Guest Additions wasn't successfully installed. Try disabling strict dependency checking, and re-installing Virtualbox Guest Additions.
-
-```
-export VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1
-vagrant plugin install vagrant-vbguest
-```
 
 ## Contributing
 
