@@ -20,7 +20,7 @@ services:
     command: npm run dev:docker
     image: web-app
     volumes:
-      - ../web-app/src:/usr/app/src:ro
+      - ../web-app/src:/usr/app/src:rw
   back-end:
     build:
       context: ../
