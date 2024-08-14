@@ -17,9 +17,10 @@ We use the latest Debian build published [here](https://app.vagrantup.com/generi
 
 1. Prerequisites
 
+   - Access to AWS
+   - Install [AWS CLI](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html)
    - Install [Docker](https://docs.docker.com/get-docker/)
    - Install npm and node (most packages require node 18)
-   - Access to AWS
    - Access to Fusionauth OR the values of the env variables that need to be set up for Fusionauth to work.
    - Access to repositories `back-end`, `infrastructure`, `notification-service`, `upload-service`, `web-app`, `stela`
 
@@ -43,8 +44,7 @@ We use the latest Debian build published [here](https://app.vagrantup.com/generi
    ```
 
 1. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
-   You will need to do this for both this repo and the `stela` and `web-app` repos, as they both have the `.env` file referenced in
-   the docker compose file.
+   You will need to do this for both this repo and the `stela` and `web-app` repos, as they both have the `.env` file referenced in the docker compose file.
 
    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
    - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
@@ -52,18 +52,18 @@ We use the latest Debian build published [here](https://app.vagrantup.com/generi
    - `UPLOAD_SERVICE_SENTRY_DSN` is optional and allows sentry configuration for the upload service.
    - `NOTIFICATION_DATABASE_URL` and `NOTIFICATION_FIREBASE_CREDENTIALS` are required for the notification service
 
+1. Download the SSL certs for the nginx load balancer to use inside the docker network.
+   It's important that the AWS env vars have been set for the CLI command to work
+
+   ```
+   source .env && aws s3 cp --recursive s3://permanent-local/certs ./certs
+   ```
+
 1. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
 
    ```bash
    printf "\n127.0.0.1 local.permanent.org" | sudo tee -a /etc/hosts
    ```
-
-<!-- 1. Build `stela`
-
-   ```
-   cd ../stela
-   npm run build -ws
-   ``` -->
 
 1. Return to `devenv` and run the following command to bring a development environment for the first
    time, or to start up a halted VMs.
