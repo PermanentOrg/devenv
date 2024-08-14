@@ -63,10 +63,10 @@ services:
     env_file:
       - ../stela/.env
     volumes:
-      - ../stela:/usr/local/apps/stela/
-      - ignore_module:/usr/local/apps/stela/node_modules
-      - ignore_api:/usr/local/apps/stela/packages/api/node_modules
-      - ignore_logger:/usr/local/apps/stela/packages/logger/node_modules
+      - ../stela/packages/api/src:/usr/local/apps/stela/packages/api/src
+      - ../stela/packages/logger/src:/usr/local/apps/stela/packages/logger/src
+      - ../stela/packages/archivematica_cleanup/src:/usr/local/apps/stela/packages/archivematica_cleanup/src
+      - ../stela/packages/account_space_updater/src:/usr/local/apps/stela/packages/account_space_updater/src
     depends_on:
       database:
         condition: service_healthy
