@@ -11,7 +11,6 @@ services:
       stela:
         condition: service_healthy
       web-app:
-        # TODO -> update condition to healty
         condition: service_started
   web-app:
     build:
@@ -43,6 +42,7 @@ services:
       - ./.env
     volumes:
       - ../back-end/api:/data/www/api
+      - ../back-end/daemon:/data/www/daemon
       - ../log:/var/log/permanent
     depends_on:
       database:
