@@ -42,6 +42,7 @@ services:
       - ./.env
     volumes:
       - ../back-end/api:/data/www/api
+      - ../back-end/library:/data/www/library
       - ../back-end/daemon:/data/www/daemon
       - ../log:/var/log/permanent
     depends_on:
