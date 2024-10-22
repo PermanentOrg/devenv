@@ -95,6 +95,10 @@ The repo sync script essentially helps you stay up to date with work going on ac
 - _Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository._
 
 ## Troubleshooting
+- If the `stela` container claims to be missing dependencies that are stated in the `package.json` file, you may need
+to delete your `stela` image and rebuild it. You can find the image with `docker image ls` and delete it with
+`docker rmi <image_tag>`, or you can run `docker compose down` followed by `docker system prune --all` to  remove all
+images not currently in use. In either case, `docker compose up -d` will rebuild the image.
 
 - If running `docker compose up` results in an error due to port 80 being in use already, you likely need to turn off
   apache, which runs by default on many distros.
