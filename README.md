@@ -9,10 +9,6 @@ environment are not yet publicly available. This will change. We are
 in the process of moving more code into public view, publishing it as
 open source, and streamlining our repository structure.
 
-Our current development environment is a VirtualBox VM managed by [Vagrant](https://www.vagrantup.com/).
-
-We use the latest Debian build published [here](https://app.vagrantup.com/generic/boxes/debian10) for our development.
-
 ## Usage
 
 1. Prerequisites
