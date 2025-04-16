@@ -88,7 +88,7 @@ services:
       timeout: 3s
       retries: 3
     ports:
-      - "5432:5432"
+      - "${HOST_DB_PORT:-5432}:5432"
   database_setup:
     image: postgres:14-alpine
     volumes:
