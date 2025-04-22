@@ -16,8 +16,12 @@ services:
     build:
       context: ../
       dockerfile: web-app/Dockerfile.local
+      args:
+        FONTAWESOME_PACKAGE_TOKEN: ${FONTAWESOME_PACKAGE_TOKEN}
     command: npm run dev:docker
     image: web-app
+    env_file:
+      - .env
     volumes:
       - ../web-app/src:/usr/app/src:rw
   back-end:
