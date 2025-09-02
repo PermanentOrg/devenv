@@ -33,13 +33,13 @@ open source, and streamlining our repository structure.
    for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
    ```
 
-1. create log folder next to the repo folders. where the backend container's logs folder will be mounted for easy access.
+1. Create a log folder next to the repo folders. This will be where the backend container's logs folder will be mounted for easy access.
 
    ```bash
    mkdir log
    ```
 
-1. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
+1. Run `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
    You will need to do this for both this repo and the `stela` and `web-app` repos, as they both have the `.env` file referenced in the docker compose file.
 
    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
@@ -65,7 +65,7 @@ open source, and streamlining our repository structure.
    time, or to start up a halted VMs.
 
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 1. Load the website at https://local.permanent.org/app.
