@@ -1,3 +1,5 @@
+name: permanent
+
 services:
   load_balancer:
     image: nginx:alpine
