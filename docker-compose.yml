@@ -116,3 +116,7 @@ volumes:
   ignore_module:
   ignore_api:
   ignore_logger:
+
+networks:
+  default:
+    name: permanent_default
