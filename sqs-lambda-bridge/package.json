@@ -1,0 +1,21 @@
+{
+  "name": "sqs-lambda-bridge",
+  "version": "1.0.0",
+  "description": "Bridge for connecting SQS queues to Lambda functions (LocalStack or AWS)",
+  "main": "dist/bridge.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/bridge.js",
+    "dev": "ts-node bridge.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sqs": "^3.700.0",
+    "@aws-sdk/client-lambda": "^3.700.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.2",
+    "ts-node": "^10.9.2"
+  }
+}

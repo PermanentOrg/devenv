@@ -1,3 +1,6 @@
 .env
 *.log
+*.pid
 certs/
+sam-env-vars.json
+sqs-lambda-bridge/config.json

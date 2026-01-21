@@ -1,0 +1,81 @@
+{
+  "bridges": [
+    {
+      "name": "trigger_archivematica",
+      "queue": {
+        "queueUrl": "http://localstack:4566/000000000000/Local_Archivematica_Queue_<DevName>",
+        "queueArn": "arn:aws:sqs:us-west-2:000000000000:Local_Archivematica_Queue_<DevName>",
+        "endpoint": "http://localstack:4566"
+      },
+      "lambda": {
+        "functionName": "TriggerArchivematicaFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
+    },
+    {
+      "name": "record_thumbnail_attacher",
+      "queue": {
+        "queueUrl": "https://sqs.us-west-2.amazonaws.com/364159549467/record-thumbnail-local-<dev_name>",
+        "queueArn": "arn:aws:sqs:us-west-2:364159549467:record-thumbnail-local-<dev_name>"
+      },
+      "lambda": {
+        "functionName": "RecordThumbnailAttacherFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
+    },
+    {
+      "name": "access_copy_attacher",
+      "queue": {
+        "queueUrl": "https://sqs.us-west-2.amazonaws.com/364159549467/access-copies-local-<dev_name>",
+        "queueArn": "arn:aws:sqs:us-west-2:364159549467:access-copies-local-<dev_name>"
+      },
+      "lambda": {
+        "functionName": "AccessCopyAttacherFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
+    },
+    {
+      "name": "account_space_updater",
+      "queue": {
+        "queueUrl": "http://localstack:4566/000000000000/Local_Account_Space_Update_Queue_<DevName>",
+        "queueArn": "arn:aws:sqs:us-west-2:000000000000:Local_Account_Space_Update_Queue_<DevName>",
+        "endpoint": "http://localstack:4566"
+      },
+      "lambda": {
+        "functionName": "AccountSpaceUpdaterFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
+    },
+    {
+      "name": "metadata_attacher",
+      "queue": {
+        "queueUrl": "https://sqs.us-west-2.amazonaws.com/364159549467/metadata-attacher-local-<dev_name>",
+        "queueArn": "arn:aws:sqs:us-west-2:364159549467:metadata-attacher-local-<dev_name>"
+      },
+      "lambda": {
+        "functionName": "MetadataAttacherFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
+    }
+  ]
+}

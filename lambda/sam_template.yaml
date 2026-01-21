@@ -1,0 +1,128 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Combined SAM template for local Lambda development
+
+Resources:
+  TriggerArchivematicaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: trigger_archivematica_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ARCHIVEMATICA_HOST_URL: ""
+          ARCHIVEMATICA_API_KEY: ""
+          ARCHIVEMATICA_ORIGINAL_LOCATION_ID: ""
+          ARCHIVEMATICA_PROCESSING_WORKFLOW: ""
+          ENV: ""
+          AWS_REGION: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: Dockerfile.trigger_archivematica
+
+  RecordThumbnailAttacherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: record_thumbnail_attacher_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ENV: ""
+          AWS_REGION: ""
+          CLOUDFRONT_URL: ""
+          CLOUDFRONT_KEY_PAIR_ID: ""
+          CLOUDFRONT_PRIVATE_KEY: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: Dockerfile.record_thumbnail_attacher
+
+  AccessCopyAttacherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: access_copy_attacher_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ENV: ""
+          AWS_REGION: ""
+          CLOUDFRONT_URL: ""
+          CLOUDFRONT_KEY_PAIR_ID: ""
+          CLOUDFRONT_PRIVATE_KEY: ""
+          S3_BUCKET: ""
+          BACKBLAZE_BUCKET: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: Dockerfile.access_copy_attacher
+
+  AccountSpaceUpdaterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: account_space_updater_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ENV: ""
+          AWS_REGION: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: Dockerfile.account_space_updater
+
+  MetadataAttacherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: metadata_attacher_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ENV: ""
+          AWS_REGION: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: Dockerfile.metadata_attacher
+
+Outputs:
+  TriggerArchivematicaFunctionName:
+    Description: Name of the Trigger Archivematica Lambda function
+    Value: !Ref TriggerArchivematicaFunction
+  TriggerArchivematicaFunctionArn:
+    Description: ARN of the Trigger Archivematica Lambda function
+    Value: !GetAtt TriggerArchivematicaFunction.Arn
+  RecordThumbnailAttacherFunctionName:
+    Description: Name of the Record Thumbnail Attacher Lambda function
+    Value: !Ref RecordThumbnailAttacherFunction
+  RecordThumbnailAttacherFunctionArn:
+    Description: ARN of the Record Thumbnail Attacher Lambda function
+    Value: !GetAtt RecordThumbnailAttacherFunction.Arn
+  AccessCopyAttacherFunctionName:
+    Description: Name of the Access Copy Attacher Lambda function
+    Value: !Ref AccessCopyAttacherFunction
+  AccessCopyAttacherFunctionArn:
+    Description: ARN of the Access Copy Attacher Lambda function
+    Value: !GetAtt AccessCopyAttacherFunction.Arn
+  AccountSpaceUpdaterFunctionName:
+    Description: Name of the Account Space Updater Lambda function
+    Value: !Ref AccountSpaceUpdaterFunction
+  AccountSpaceUpdaterFunctionArn:
+    Description: ARN of the Account Space Updater Lambda function
+    Value: !GetAtt AccountSpaceUpdaterFunction.Arn
+  MetadataAttacherFunctionName:
+    Description: Name of the Metadata Attacher Lambda function
+    Value: !Ref MetadataAttacherFunction
+  MetadataAttacherFunctionArn:
+    Description: ARN of the Metadata Attacher Lambda function
+    Value: !GetAtt MetadataAttacherFunction.Arn

@@ -1,0 +1,17 @@
+{
+  "name": "permanent-devenv",
+  "version": "1.0.0",
+  "description": "This repository contains the configuration information required to bring up a development environment for the Permanent Legacy Foundation website.",
+  "homepage": "https://github.com/PermanentOrg/devenv#readme",
+  "bugs": {
+    "url": "https://github.com/PermanentOrg/devenv/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PermanentOrg/devenv.git"
+  },
+  "scripts": {
+    "startup": "docker compose up -d && ./lambda/start-sam-local.sh --detach",
+    "shutdown": "docker compose down && ./lambda/stop-sam-local.sh"
+  }
+}
