@@ -41,6 +41,7 @@ and its destination should be the SNS topic `record-thumbnail-topic-local-<dev_n
    - "Purpose" to "Transfer Source"
    - "Relative Path" to `_<DevName>/originals`
    - "Description" to "Original copies (<DevName>'s local env)"
+1. Take the id of that location and add it to your stela .env file as `ARCHIVEMATICA_ORIGINAL_LOCATION_ID`
 5. Click "Create Location"
 6. Repeat steps 3-5, but this time set
    - "Purpose" to "AIP Storage"
@@ -51,5 +52,5 @@ and its destination should be the SNS topic `record-thumbnail-topic-local-<dev_n
    - "Relative Path" to `_<DevName>/access_copies`
    - "Description" to "DIP Storage in S3 (<DevName>'s local env)"
 8. Open the dev environment's [Archivematica dashboard](https://dev.archivematica.permanent.org)
-9. Under Administration > Processing Configuration, create a new processing configuration called `local_<dev_name>`
+9. Under Administration > Processing Configuration, create a new processing configuration called `local_<dev_name>`. Add that to your stela .env file as ARCHIVEMATICA_PROCESSING_WORKFLOW.
 10. In your new configuration, copy the values from the `default` configuration, except point the "Store AIP Location" and "Store DIP Location" to the locations created above.
