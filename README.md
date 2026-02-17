@@ -12,26 +12,23 @@ open source, and streamlining our repository structure.
 ## Usage
 
 1. Prerequisites
-
    - Access to AWS
    - Install [AWS CLI](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html)
    - Install [Docker](https://docs.docker.com/get-docker/)
    - Install npm and node (most packages require node 18)
+   - Install the AWS SAM CLI as described [here](docs/SAM_LOCAL_SETUP.md)
    - Access to Fusionauth OR the values of the env variables that need to be set up for Fusionauth to work.
    - Access to repositories `back-end`, `infrastructure`, `notification-service`, `upload-service`, `web-app`, `stela`
 
-1. Create three [AWS SQS queues](https://aws.amazon.com/sqs/) (type: Standard) with the following names:
-
-   - Local_Low_Priority_YourName
-   - Local_Video_YourName
-   - Local_High_Priority_YourName
+1. Set up all necessary [cloud resources](docs/CLOUD_SETUP.md), or ensure that they already exist.
 
 1. Set up directory structure. If you have access to the Permanent repositories, navigate to the parent directory of this directory and clone the needed repositories.
 
-   ```bash
+   ````bash
    cd ..
-   for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done
-   ```
+   for r in back-end infrastructure notification-service upload-service web-app stela; do git clone git@github.com:PermanentOrg/$r.git; done ```
+
+   ````
 
 1. create log folder next to the repo folders. where the backend container's logs folder will be mounted for easy access.
 
@@ -41,7 +38,6 @@ open source, and streamlining our repository structure.
 
 1. `cp .env.template .env` and define the required environment variables in `.env` using your preferred file editor.
    You will need to do this for both this repo and the `stela` and `web-app` repos, as they both have the `.env` file referenced in the docker compose file.
-
    - Create an AWS Access Key [here](https://console.aws.amazon.com/iam/home?#/security_credentials) and download the credentials.
    - Add values for the following variables associated with the key: `AWS_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_ACCESS_SECRET`.
    - `SQS_IDENT` will be the name you you selected above when creating the SQS queues, preceded by an underscore.
@@ -61,11 +57,14 @@ open source, and streamlining our repository structure.
    printf "\n127.0.0.1 local.permanent.org" | sudo tee -a /etc/hosts
    ```
 
-1. Return to `devenv` and run the following command to bring a development environment for the first
-   time, or to start up a halted VMs.
+1. Install the prerequisites for running local lambdas as described [here](docs/SAM_LOCAL_SETUP.md).
+
+1. Configure your lambda queue subscriptions as described [here](docs/SQS_LAMBDA_BRIDGE.md)
+
+1. Return to `devenv` and run the following command to bring a development environment
 
    ```bash
-   docker-compose up -d
+      npm run startup
    ```
 
 1. Load the website at https://local.permanent.org/app.
@@ -73,7 +72,7 @@ open source, and streamlining our repository structure.
 1. When you're done working on the dev environment, bring it down.
 
    ```bash
-   docker-compose down
+      npm run shutdown
    ```
 
 ## Helpers
@@ -90,11 +89,23 @@ The repo sync script essentially helps you stay up to date with work going on ac
 
 - _Usage In Debugging: It's also a good first thing to do if something goes wrong with your environment; as you would need ensure that you are using the latest copy of each repository._
 
+## Adding New Topics, Queues, and Lambdas to the Dev Environment
+
+These instructions will assume that you're adding a Lambda, which you want to run locally, to the development environment, and that that lambda is triggered
+by an SQS queue subscribed to an SNS topic. If you're only adding a subset of these things, adjust the procedure accordingly
+
+1. If your queue and topic can be run locally, update the [LocalStack setup](localstack-init/setup_resources.sh) to create your topic, queue, and subscription.
+2. If your queue and topic must run in AWS (perhaps because your events come from S3), create them via the AWS console and subscribe the queue to the topic.
+   Update the [cloud setup docs](docs/CLOUD_SETUP.md) so future developers know they need to create these.
+3. [Add your Lambda](docs/SAM_LOCAL_SETUP.md) to this repo's SAM config.
+4. [Update the SQS-Lambda bridge](docs/SQS_LAMBDA_BRIDGE.md) to trigger your Lambda when messages arrive on your queue. Remember to update the example config as well.
+
 ## Troubleshooting
+
 - If the `stela` container claims to be missing dependencies that are stated in the `package.json` file, you may need
-to delete your `stela` image and rebuild it. You can find the image with `docker image ls` and delete it with
-`docker rmi <image_tag>`, or you can run `docker compose down` followed by `docker system prune --all` to  remove all
-images not currently in use. In either case, `docker compose up -d` will rebuild the image.
+  to delete your `stela` image and rebuild it. You can find the image with `docker image ls` and delete it with
+  `docker rmi <image_tag>`, or you can run `docker compose down` followed by `docker system prune --all` to remove all
+  images not currently in use. In either case, `docker compose up -d` will rebuild the image.
 
 - If running `docker compose up` results in an error due to port 80 being in use already, you likely need to turn off
   apache, which runs by default on many distros.

@@ -77,12 +77,48 @@ services:
     depends_on:
       database:
         condition: service_healthy
+      localstack:
+        condition: service_healthy
     healthcheck:
       test: curl http://localhost:8080/api/v2/health
   cache:
     image: memcached:1.5.6-alpine
     ports:
       - "11211:11211"
+  localstack:
+    image: localstack/localstack:3.0
+    env_file:
+      - ./.env
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs,lambda
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LAMBDA_DOCKER_NETWORK=permanent_default
+      - LAMBDA_EXECUTOR=docker-reuse
+      - LAMBDA_REMOVE_CONTAINERS=false
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./localstack-init:/etc/localstack/init/ready.d"
+    networks:
+      - default
+    depends_on:
+      trigger_archivematica_lambda_builder:
+        condition: service_completed_successfully
+      record_thumbnail_attacher_lambda_builder:
+        condition: service_completed_successfully
+      access_copy_attacher_lambda_builder:
+        condition: service_completed_successfully
+      account_space_updater_lambda_builder:
+        condition: service_completed_successfully
+      metadata_attacher_lambda_builder:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   database:
     image: postgres:14-alpine
     environment:
@@ -111,6 +147,66 @@ services:
         (dbmate --url postgresql://postgres:permanent@database:5432/permanent?sslmode=disable up)
     depends_on:
       database:
+        condition: service_healthy
+  trigger_archivematica_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/trigger_archivematica/Dockerfile
+    image: trigger_archivematica_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
+  record_thumbnail_attacher_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/record_thumbnail_attacher/Dockerfile
+    image: record_thumbnail_attacher_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
+  access_copy_attacher_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/access_copy_attacher/Dockerfile
+    image: access_copy_attacher_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
+  account_space_updater_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/account_space_updater/Dockerfile
+    image: account_space_updater_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
+  metadata_attacher_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/metadata_attacher/Dockerfile
+    image: metadata_attacher_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
+  sqs-lambda-bridge:
+    build:
+      context: ./sqs-lambda-bridge
+      dockerfile: Dockerfile
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION:-us-west-2}
+    networks:
+      - default
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      localstack:
         condition: service_healthy
 volumes:
   ignore_module:
