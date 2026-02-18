@@ -3,6 +3,7 @@ name: permanent
 services:
   load_balancer:
     image: nginx:alpine
+    restart: on-failure
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./certs:/etc/ssl:ro
@@ -81,6 +82,7 @@ services:
         condition: service_healthy
     healthcheck:
       test: curl http://localhost:8080/api/v2/health
+      start_period: 30s
   cache:
     image: memcached:1.5.6-alpine
     ports:
