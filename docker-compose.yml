@@ -10,6 +10,8 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    networks:
+      - default
     depends_on:
       stela:
         condition: service_healthy
@@ -195,6 +197,22 @@ services:
     depends_on:
       database:
         condition: service_healthy
+  event_send:
+    build:
+      context: ../stela
+      dockerfile: packages/event_send/Dockerfile.dev
+    env_file:
+      - ../stela/.env
+    volumes:
+      - ../stela/packages/event_send/src:/usr/local/apps/event_send/packages/api/src
+      - ../stela/packages/logger/src:/usr/local/apps/logger/packages/api/src
+      - ../stela/packages/publisher-utils/src:/usr/local/apps/publisher-utils/packages/api/src
+    depends_on:
+      database:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    restart: on-failure
   sqs-lambda-bridge:
     build:
       context: ./sqs-lambda-bridge
