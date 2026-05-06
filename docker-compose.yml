@@ -75,8 +75,7 @@ services:
     volumes:
       - ../stela/packages/api/src:/usr/local/apps/stela/packages/api/src
       - ../stela/packages/logger/src:/usr/local/apps/stela/packages/logger/src
-      - ../stela/packages/archivematica_cleanup/src:/usr/local/apps/stela/packages/archivematica_cleanup/src
-      - ../stela/packages/account_space_updater/src:/usr/local/apps/stela/packages/account_space_updater/src
+      - ../stela/packages/permanent_models/src:/usr/local/apps/stela/packages/permanent_models/src
     depends_on:
       database:
         condition: service_healthy
@@ -204,9 +203,9 @@ services:
     env_file:
       - ../stela/.env
     volumes:
-      - ../stela/packages/event_send/src:/usr/local/apps/event_send/packages/api/src
-      - ../stela/packages/logger/src:/usr/local/apps/logger/packages/api/src
-      - ../stela/packages/publisher-utils/src:/usr/local/apps/publisher-utils/packages/api/src
+      - ../stela/packages/event_send/src:/usr/local/apps/stela/packages/event_send/src
+      - ../stela/packages/logger/src:/usr/local/apps/stela/packages/logger/src
+      - ../stela/packages/publisher-utils/src:/usr/local/apps/stela/packages/publisher-utils/src
     depends_on:
       database:
         condition: service_healthy
