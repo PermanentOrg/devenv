@@ -10,6 +10,8 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    networks:
+      - default
     depends_on:
       stela:
         condition: service_healthy
@@ -73,8 +75,7 @@ services:
     volumes:
       - ../stela/packages/api/src:/usr/local/apps/stela/packages/api/src
       - ../stela/packages/logger/src:/usr/local/apps/stela/packages/logger/src
-      - ../stela/packages/archivematica_cleanup/src:/usr/local/apps/stela/packages/archivematica_cleanup/src
-      - ../stela/packages/account_space_updater/src:/usr/local/apps/stela/packages/account_space_updater/src
+      - ../stela/packages/permanent_models/src:/usr/local/apps/stela/packages/permanent_models/src
     depends_on:
       database:
         condition: service_healthy
@@ -195,6 +196,22 @@ services:
     depends_on:
       database:
         condition: service_healthy
+  event_send:
+    build:
+      context: ../stela
+      dockerfile: packages/event_send/Dockerfile.dev
+    env_file:
+      - ../stela/.env
+    volumes:
+      - ../stela/packages/event_send/src:/usr/local/apps/stela/packages/event_send/src
+      - ../stela/packages/logger/src:/usr/local/apps/stela/packages/logger/src
+      - ../stela/packages/publisher-utils/src:/usr/local/apps/stela/packages/publisher-utils/src
+    depends_on:
+      database:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    restart: on-failure
   sqs-lambda-bridge:
     build:
       context: ./sqs-lambda-bridge
