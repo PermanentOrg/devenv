@@ -19,6 +19,7 @@ Resources:
           ARCHIVEMATICA_PROCESSING_WORKFLOW: ""
           ENV: ""
           AWS_REGION: ""
+          SENTRY_DSN: ""
     Metadata:
       DockerContext: ../stela
       Dockerfile: Dockerfile.trigger_archivematica
@@ -95,6 +96,27 @@ Resources:
       DockerContext: ../stela
       Dockerfile: Dockerfile.metadata_attacher
 
+  FileCopierFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      PackageType: Image
+      ImageUri: file_copier_lambda:latest
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          DATABASE_URL: ""
+          ENV: ""
+          AWS_REGION: ""
+          CLOUDFRONT_URL: ""
+          CLOUDFRONT_KEY_PAIR_ID: ""
+          CLOUDFRONT_PRIVATE_KEY: ""
+          S3_BUCKET: ""
+          SENTRY_DSN: ""
+    Metadata:
+      DockerContext: ../stela
+      Dockerfile: packages/file_copier/Dockerfile
+
 Outputs:
   TriggerArchivematicaFunctionName:
     Description: Name of the Trigger Archivematica Lambda function
@@ -126,3 +148,9 @@ Outputs:
   MetadataAttacherFunctionArn:
     Description: ARN of the Metadata Attacher Lambda function
     Value: !GetAtt MetadataAttacherFunction.Arn
+  FileCopierFunctionName:
+    Description: Name of the File Copier Lambda function
+    Value: !Ref FileCopierFunction
+  FileCopierFunctionArn:
+    Description: ARN of the File Copier Lambda function
+    Value: !GetAtt FileCopierFunction.Arn

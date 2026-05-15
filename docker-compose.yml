@@ -117,6 +117,8 @@ services:
         condition: service_completed_successfully
       metadata_attacher_lambda_builder:
         condition: service_completed_successfully
+      file_copier_lambda_builder:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
       interval: 10s
@@ -212,6 +214,15 @@ services:
       localstack:
         condition: service_healthy
     restart: on-failure
+  file_copier_lambda_builder:
+    build:
+      context: ../stela
+      dockerfile: packages/file_copier/Dockerfile
+    image: file_copier_lambda:latest
+    entrypoint: ["/bin/sh", "-c", "echo 'Lambda image built successfully' && exit 0"]
+    depends_on:
+      database:
+        condition: service_healthy
   sqs-lambda-bridge:
     build:
       context: ./sqs-lambda-bridge
