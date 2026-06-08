@@ -61,11 +61,14 @@ fi
 if ! docker images | grep -q "metadata_attacher_lambda"; then
     MISSING_IMAGES+=("metadata_attacher_lambda")
 fi
+if ! docker images | grep -q "file_copier_lambda"; then
+    MISSING_IMAGES+=("file_copier_lambda")
+fi
 
 if [ ${#MISSING_IMAGES[@]} -gt 0 ]; then
     echo "ERROR: Lambda image(s) not found: ${MISSING_IMAGES[*]}"
     echo "Build them first with:"
-    echo "  docker compose up -d trigger_archivematica_lambda_builder record_thumbnail_attacher_lambda_builder access_copy_attacher_lambda_builder account_space_updater_lambda_builder metadata_attacher_lambda_builder"
+    echo "  docker compose up -d trigger_archivematica_lambda_builder record_thumbnail_attacher_lambda_builder access_copy_attacher_lambda_builder account_space_updater_lambda_builder metadata_attacher_lambda_builder file_copier_lambda_builder"
     exit 1
 fi
 
@@ -95,7 +98,8 @@ cat > "$ENV_VARS_FILE" <<EOF
     "ARCHIVEMATICA_ORIGINAL_LOCATION_ID": "$ARCHIVEMATICA_ORIGINAL_LOCATION_ID",
     "ARCHIVEMATICA_PROCESSING_WORKFLOW": "$ARCHIVEMATICA_PROCESSING_WORKFLOW",
     "ENV": "$ENV",
-    "AWS_REGION": "$AWS_REGION"
+    "AWS_REGION": "$AWS_REGION",
+    "SENTRY_DSN": "$SENTRY_DSN"
   },
   "RecordThumbnailAttacherFunction": {
     "DATABASE_URL": "$DATABASE_URL",
@@ -120,10 +124,20 @@ cat > "$ENV_VARS_FILE" <<EOF
     "ENV": "$ENV",
     "AWS_REGION": "$AWS_REGION"
   },
-  "AccountSpaceUpdaterFunction": {
+  "MetadataAttacherFunction": {
     "DATABASE_URL": "$DATABASE_URL",
     "ENV": "$ENV",
     "AWS_REGION": "$AWS_REGION"
+  },
+  "FileCopierFunction": {
+    "DATABASE_URL": "$DATABASE_URL",
+    "ENV": "$ENV",
+    "AWS_REGION": "$AWS_REGION",
+    "CLOUDFRONT_URL": "$CLOUDFRONT_URL",
+    "CLOUDFRONT_KEY_PAIR_ID": "$CLOUDFRONT_KEY_PAIR_ID",
+    "CLOUDFRONT_PRIVATE_KEY": "$CLOUDFRONT_PRIVATE_KEY",
+    "S3_BUCKET": "$S3_BUCKET",
+    "SENTRY_DSN": "$SENTRY_DSN"
   }
 }
 EOF

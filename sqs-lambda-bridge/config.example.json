@@ -76,6 +76,22 @@
       "waitTimeSeconds": 20,
       "visibilityTimeout": 300,
       "deleteOnError": false
+    },
+    {
+      "name": "file_copier",
+      "queue": {
+        "queueUrl": "http://localstack:4566/000000000000/Local_File_Copier_Queue_<DevName>",
+        "queueArn": "arn:aws:sqs:us-west-2:000000000000:Local_File_Copier_Queue_<DevName>",
+        "endpoint": "http://localstack:4566"
+      },
+      "lambda": {
+        "functionName": "FileCopierFunction",
+        "endpoint": "http://host.docker.internal:3001"
+      },
+      "batchSize": 10,
+      "waitTimeSeconds": 20,
+      "visibilityTimeout": 300,
+      "deleteOnError": false
     }
   ]
 }
