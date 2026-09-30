@@ -19,6 +19,7 @@ open source, and streamlining our repository structure.
    - Install the AWS SAM CLI as described [here](docs/SAM_LOCAL_SETUP.md)
    - Access to Fusionauth OR the values of the env variables that need to be set up for Fusionauth to work.
    - Access to repositories `back-end`, `infrastructure`, `notification-service`, `upload-service`, `web-app`, `stela`
+   - Install `mkcert` and `libnss3-tools` (available through `apt` on Debian-based Linux)
 
 1. Set up all necessary [cloud resources](docs/CLOUD_SETUP.md), or ensure that they already exist.
 
@@ -49,6 +50,17 @@ open source, and streamlining our repository structure.
 
    ```
    source .env && aws s3 cp --recursive s3://permanent-local/certs ./certs
+
+   ```
+
+1. Add the certs you just downloaded to your trusted certificates
+
+   ```
+   test -f certs/ca/rootCA.pem && CAROOT=certs/ca mkcert -install
+   ```
+
+   ```
+
    ```
 
 1. Edit your local host file (e.g. `/etc/hosts`) to connect to the host with the correct domain name.
