@@ -15,7 +15,7 @@ open source, and streamlining our repository structure.
    - Access to AWS
    - Install [AWS CLI](https://docs.aws.amazon.com/cli/v1/userguide/cli-chap-install.html)
    - Install [Docker](https://docs.docker.com/get-docker/)
-   - Install npm and node (most packages require node 18)
+   - Install npm and node (most packages require node 26)
    - Install the AWS SAM CLI as described [here](docs/SAM_LOCAL_SETUP.md)
    - Access to Fusionauth OR the values of the env variables that need to be set up for Fusionauth to work.
    - Access to repositories `back-end`, `infrastructure`, `notification-service`, `upload-service`, `web-app`, `stela`
